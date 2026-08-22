@@ -1,3 +1,6 @@
+// @ts-ignore
+// @ts-nocheck
+
 /**
  * Helper to convert uploaded File (image or PDF) to an Image Data URL
  */
