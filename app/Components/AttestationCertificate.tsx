@@ -16,7 +16,7 @@ export interface AttestationData {
 export function OmanSeal({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`flex flex-col items-center justify-center text-center ${className}`}
+      className={`flex flex-col items-center  justify-center text-center ${className}`}
       style={{ width: "115px" }}
     >
       <svg
@@ -165,9 +165,9 @@ interface AttestationCardProps {
 export function AttestationCard({ data, className = "" }: AttestationCardProps) {
   return (
     <div
-      className={`relative ${className}`}
+      className={`relative ${className} pr-8`}
       style={{
-        width: "515px",
+        width: "430px",
         backgroundColor: "#ffffff",
         color: "#0f172a",
         fontFamily: "Arial, Helvetica, sans-serif",
@@ -175,7 +175,7 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
     >
       {/* Outer Border Box */}
       <div
-        className="relative pt-0 pb-2 px-2.5"
+        className="relative -mt-14 pb-2 px-2.5"
         style={{
           border: "1.5px solid #8ca3b3",
           borderRadius: "1px",
@@ -183,10 +183,10 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
       >
         {/* Top Gold / Ochre Banner */}
         <div
-          className="mx-auto -mt-0.5 py-1 px-3 text-center shadow-sm"
+          className="mx-auto -mt-4  py-1 px-3 text-center shadow-sm"
           style={{
             width: "82%",
-            maxWidth: "420px",
+            maxWidth: "320px",
             backgroundColor: "#ba9b56",
             color: "#ffffff",
             borderRadius: "0 0 2px 2px",
@@ -215,15 +215,15 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
         </div>
 
         {/* Main Card Row: Seal + Table */}
-        <div className="mt-2.5 flex items-center gap-3">
+        <div className="mt-1 flex relative items-center gap-3">
           {/* Left Seal */}
-          <div className="flex-shrink-0 flex justify-center pl-0.5" style={{ width: "118px" }}>
+          <div className="shrink-0 top-1/2 -translate-y-1/2  -left-20 flex absolute justify-center pl-0.5" style={{ width: "138px" }}>
             <OmanSeal />
           </div>
 
           {/* Center/Right Table */}
-          <div className="flex-1 pr-1">
-            <table className="w-full border-collapse" style={{ fontSize: "11.5px" }}>
+          <div className="flex-1 pl-11 pr-1">
+            <table className="w-full border-collapse" style={{ fontSize: "10.5px" }}>
               <tbody>
                 <tr>
                   <td
@@ -233,8 +233,8 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
                     e-Verify No
                   </td>
                   <td
-                    className="py-0.5 px-1.5 text-left font-bold"
-                    style={{ color: "#000000" }}
+                    className="py-0.5 px-1.5 text-left text-nowrap font-bold"
+                    style={{ color: "#000000", width: "140px" }}
                   >
                     {data.eVerifyNo}
                   </td>
@@ -256,7 +256,7 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
                   </td>
                   <td
                     className="py-0.5 px-1.5 text-left font-bold"
-                    style={{ color: "#000000" }}
+                    style={{ color: "#000000", width: "140px" }}
                   >
                     {data.verifyBy}
                   </td>
@@ -278,7 +278,7 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
                   </td>
                   <td
                     className="py-0.5 px-1.5 text-left font-bold"
-                    style={{ color: "#000000" }}
+                    style={{ color: "#000000", width: "140px" }}
                   >
                     {data.verifyAt}
                   </td>
@@ -293,14 +293,15 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
 
                 <tr>
                   <td
-                    className="py-0.5 text-left font-bold whitespace-nowrap"
+                    className="py-0.5 text-wrap text-left justify-start font-bold whitespace-nowrap"
                     style={{ color: "#0f172a" }}
                   >
-                    Applicant Name
+                    Applicant <br /> 
+                    Name
                   </td>
                   <td
-                    className="py-0.5 px-1.5 text-left font-bold uppercase"
-                    style={{ color: "#000000" }}
+                    className="py-0.5 px-1.5 flex text-left justify-start text-nowrap font-bold uppercase"
+                    style={{ color: "#000000", width: "140px" }}
                   >
                     {data.applicantName}
                   </td>
@@ -318,17 +319,18 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
                     className="py-0.5 text-left font-bold align-top whitespace-nowrap"
                     style={{ color: "#0f172a" }}
                   >
-                    Document Name
+                    Document <br /> Name
                   </td>
                   <td
-                    className="py-0.5 px-1.5 text-left font-bold align-top leading-snug"
-                    style={{ color: "#000000" }}
+
+                    className="py-0.5 px-1.5 flex text-left w-full font-bold align-top leading-snug"
+                    style={{ color: "#000000", width: "140px" }}
                   >
                     {data.documentName}
                   </td>
                   <td
                     className="py-0.5 text-right font-bold align-top whitespace-nowrap"
-                    style={{ color: "#0f172a" }}
+                    style={{ color: "#0f172a"}}
                     dir="rtl"
                   >
                     اسم الوثيقة
@@ -337,14 +339,14 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
 
                 <tr>
                   <td
-                    className="py-0.5 text-left font-bold whitespace-nowrap"
+                    className="py-0.5 text-left h-fit font-bold whitespace-nowrap"
                     style={{ color: "#0f172a" }}
                   >
-                    Date of Attestation
+                    Date of <br /> Attestation
                   </td>
                   <td
-                    className="py-0.5 px-1.5 text-left font-bold"
-                    style={{ color: "#000000" }}
+                    className="py-0.5 px-1.5 text-left flex text-nowrap font-bold"
+                    style={{ color: "#000000", width: "140px" }}
                   >
                     {data.dateOfAttestation}
                   </td>
@@ -366,7 +368,7 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
                   </td>
                   <td
                     className="py-0.5 px-1.5 text-left font-bold"
-                    style={{ color: "#000000" }}
+                    style={{ color: "#000000", width: "140px" }}
                   >
                     {data.approverName}
                   </td>
@@ -438,6 +440,9 @@ export default function AttestationCertificate({
         className="w-full mt-3"
         style={{
           borderTop: "1.5px solid #4a687d",
+          width: "72%",
+          marginLeft: "auto",
+          marginRight: "40px"
         }}
       />
 
@@ -448,6 +453,8 @@ export default function AttestationCertificate({
           className="flex items-center gap-1.5 font-semibold"
           style={{ fontSize: "11px", color: "#64748b" }}
         >
+          
+          <span style={{ color: "#64748b" }}>Blockchain Verified</span>
           <svg
             className="w-4 h-4"
             style={{ color: "#10b981" }}
@@ -461,11 +468,10 @@ export default function AttestationCertificate({
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             <path d="M9 12l2 2 4-4" />
           </svg>
-          <span style={{ color: "#64748b" }}>Blockchain Verified</span>
         </div>
 
         {/* Right Section: Arabic Notice & QR Code */}
-        <div className="flex items-center gap-3">
+        <div className="flex relative z-50 -mt-6 mr-0 items-center gap-3">
           <div className="text-right" dir="rtl">
             <p
               className="font-bold tracking-wide"
@@ -503,6 +509,7 @@ export default function AttestationCertificate({
               <img
                 src={qrCodeUrl}
                 alt="Verification QR Code"
+                
                 style={{ width: "68px", height: "68px", objectFit: "contain" }}
               />
             ) : (

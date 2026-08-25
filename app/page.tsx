@@ -40,25 +40,19 @@ export default function Home() {
   const attestationData: AttestationData | null = useMemo(() => {
     if (!formData || !selectedRequest) return null;
 
-    // Clean up branch name: "Salalah Branch" -> "Salalah", "Muscat Main Branch" -> "Muscat"
-    let branchName = formData.branch || "Salalah";
-    branchName = branchName.replace(/\s+Branch$/i, "").trim();
-
-    // Format current date: YYYY-MM-DD HH:mm:ss
-    const now = new Date();
-    const pad = (n: number) => n.toString().padStart(2, "0");
-    const formattedDate = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
-      now.getDate()
-    )} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    let formattedDate = formData.dateOfAttestation || "";
+    if (formattedDate && formattedDate.includes('T')) {
+      formattedDate = formattedDate.replace('T', ' ') + ':00';
+    }
 
     return {
-      eVerifyNo: "VN00638709",
-      verifyBy: "Salah 1",
-      verifyAt: branchName || "Salalah",
+      eVerifyNo: formData.eVerifyNo,
+      verifyBy: formData.verifyBy,
+      verifyAt: formData.verifyAt,
       applicantName: formData.applicantName.toUpperCase(),
       documentName: selectedRequest.name,
       dateOfAttestation: formattedDate,
-      approverName: "Sumaiyaa Al Balushi",
+      approverName: formData.approverName,
     };
   }, [formData, selectedRequest]);
 
@@ -335,6 +329,26 @@ export default function Home() {
                     <span>{formData.taxRegistrationNumber}</span>
                   </div>
                 )}
+                <div className="flex justify-between border-b border-gray-100 pb-1.5">
+                  <span className="font-medium">eVerify No:</span>
+                  <span>{formData.eVerifyNo}</span>
+                </div>
+                <div className="flex justify-between border-b border-gray-100 pb-1.5">
+                  <span className="font-medium">Verify By:</span>
+                  <span>{formData.verifyBy}</span>
+                </div>
+                <div className="flex justify-between border-b border-gray-100 pb-1.5">
+                  <span className="font-medium">Verify At:</span>
+                  <span>{formData.verifyAt}</span>
+                </div>
+                <div className="flex justify-between border-b border-gray-100 pb-1.5">
+                  <span className="font-medium">Date of Attestation:</span>
+                  <span>{formData.dateOfAttestation}</span>
+                </div>
+                <div className="flex justify-between border-b border-gray-100 pb-1.5">
+                  <span className="font-medium">Approver Name:</span>
+                  <span>{formData.approverName}</span>
+                </div>
                 {formData.documents && formData.documents.length > 0 && (
                   <div className="flex justify-between pt-1">
                     <span className="font-medium">Uploaded Files:</span>

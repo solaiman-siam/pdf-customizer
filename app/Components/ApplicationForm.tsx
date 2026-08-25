@@ -11,6 +11,11 @@ export type ApplicationFormData = {
   branch: string;
   applyingFrom: string;
   taxRegistrationNumber?: string;
+  eVerifyNo: string;
+  verifyBy: string;
+  verifyAt: string;
+  dateOfAttestation: string;
+  approverName: string;
   documents?: FileList;
 };
 
@@ -40,6 +45,11 @@ export default function ApplicationForm({
       branch: "",
       applyingFrom: "",
       taxRegistrationNumber: "",
+      eVerifyNo: "",
+      verifyBy: "",
+      verifyAt: "",
+      dateOfAttestation: "",
+      approverName: "",
     },
   });
 
@@ -163,6 +173,56 @@ export default function ApplicationForm({
               placeholder="Optional TRN"
               className={getInputClass(!!errors.taxRegistrationNumber)}
               {...register("taxRegistrationNumber")}
+            />
+          </Field>
+        </div>
+
+        <div className="mt-8 -mx-6 bg-teal-500 px-6 py-2">
+          <h3 className="text-sm font-semibold text-white">Attestation Details</h3>
+        </div>
+
+        <div className="grid grid-cols-1 gap-x-10 gap-y-5 md:grid-cols-2 mt-4 px-6">
+          <Field label="eVerify No" required error={errors.eVerifyNo?.message}>
+            <input
+              type="text"
+              placeholder="Enter eVerify number"
+              className={getInputClass(!!errors.eVerifyNo)}
+              {...register("eVerifyNo", { required: "eVerify number is required" })}
+            />
+          </Field>
+
+          <Field label="Verify By" required error={errors.verifyBy?.message}>
+            <input
+              type="text"
+              placeholder="Enter verifier name"
+              className={getInputClass(!!errors.verifyBy)}
+              {...register("verifyBy", { required: "Verifier name is required" })}
+            />
+          </Field>
+
+          <Field label="Verify At" required error={errors.verifyAt?.message}>
+            <input
+              type="text"
+              placeholder="Enter verification location"
+              className={getInputClass(!!errors.verifyAt)}
+              {...register("verifyAt", { required: "Verification location is required" })}
+            />
+          </Field>
+
+          <Field label="Date of Attestation" required error={errors.dateOfAttestation?.message}>
+            <input
+              type="datetime-local"
+              className={getInputClass(!!errors.dateOfAttestation)}
+              {...register("dateOfAttestation", { required: "Date of attestation is required" })}
+            />
+          </Field>
+
+          <Field label="Approver Name" required error={errors.approverName?.message}>
+            <input
+              type="text"
+              placeholder="Enter approver name"
+              className={getInputClass(!!errors.approverName)}
+              {...register("approverName", { required: "Approver name is required" })}
             />
           </Field>
         </div>
