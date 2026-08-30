@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { mainServices, ServiceCategory, ServiceRequest } from "@/lib/data";
 import Stepper from "./Components/Stepper";
 import ApplicationForm, { ApplicationFormData } from "./Components/ApplicationForm";
@@ -10,11 +10,15 @@ import { AttestationData } from "./Components/AttestationCertificate";
 import { generateAttestationPdf } from "@/lib/pdfGenerator";
 import { filesToDataUrls } from "@/lib/documentLoader";
 import Image from "next/image";
+import HomePage from "./Components/HomePage";
+import LoginPage, { LoginFormData } from "./Components/LoginPage";
 import OmaniRiel from "@/app/assets/images/omani-real.png";
 
-type FlowStage = "picking" | "form" | "submitted";
+type FlowStage = "home" | "picking" | "form" | "submitted";
 
 export default function Home() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [userEmail, setUserEmail] = useState<string>("");
   const [mainServiceId, setMainServiceId] = useState<string>("");
   const [categoryId, setCategoryId] = useState<string>("");
   const [showRequestModal, setShowRequestModal] = useState(false);
@@ -22,9 +26,44 @@ export default function Home() {
   const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(null);
   const [formData, setFormData] = useState<ApplicationFormData | null>(null);
   const [documentPreviewUrls, setDocumentPreviewUrls] = useState<string[]>([]);
-  const [stage, setStage] = useState<FlowStage>("picking");
+  const [stage, setStage] = useState<FlowStage>("home");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
+
+  // Check saved authentication state from localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("userAuth");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed?.email) {
+          setIsAuthenticated(true);
+          setUserEmail(parsed.email);
+          return;
+        }
+      }
+    } catch (err) {
+      console.error("Auth check failed:", err);
+    }
+    setIsAuthenticated(false);
+  }, []);
+
+  function handleLoginSuccess(data: LoginFormData) {
+    setIsAuthenticated(true);
+    setUserEmail(data.email);
+    setStage("home");
+  }
+
+  function handleLogout() {
+    try {
+      localStorage.removeItem("userAuth");
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+    setIsAuthenticated(false);
+    setUserEmail("");
+    setStage("home");
+  }
 
   const mainService = useMemo(
     () => mainServices.find((s) => s.id === mainServiceId) ?? null,
@@ -129,96 +168,226 @@ export default function Home() {
     }
   }
 
+  function handleApplyFromHome(selectedServiceId?: string, selectedCategoryId?: string) {
+    if (selectedServiceId) {
+      setMainServiceId(selectedServiceId);
+    } else if (!mainServiceId) {
+      setMainServiceId("foreign-ministry-oman");
+    }
+
+    if (selectedCategoryId) {
+      setCategoryId(selectedCategoryId);
+      setShowRequestModal(true);
+    }
+
+    setStage("picking");
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  function handleBackToHome() {
+    setStage("home");
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  // While checking auth on initial render
+  if (isAuthenticated === null) {
+    return (
+      <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center">
+        <div className="h-8 w-8 rounded-full border-2 border-teal-500 border-t-transparent animate-spin"></div>
+      </div>
+    );
+  }
+
+  // Protected Page: show LoginPage if unauthenticated
+  if (!isAuthenticated) {
+    return <LoginPage onLogin={handleLoginSuccess} />;
+  }
+
+  if (stage === "home") {
+    return (
+      <HomePage
+        onApply={handleApplyFromHome}
+        onLogout={handleLogout}
+        userEmail={userEmail}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen w-full bg-gray-200/70 p-8 text-black">
-      <h1 className="mb-6 text-center text-xl font-semibold text-gray-800">
-        {mainService?.name ?? "Foreign Ministry - Oman"}
-      </h1>
+    <div className="min-h-screen w-full bg-gray-200/70 p-4 md:p-8 text-black font-sans">
+      {/* Top Application Flow Header */}
+      <div className="max-w-5xl mx-auto mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white px-5 py-3.5 rounded-xl border border-gray-200 shadow-sm">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleBackToHome}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-teal-800 hover:text-teal-950 transition-colors cursor-pointer"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            <span>Back to Home</span>
+          </button>
+        </div>
+
+        <h1 className="text-base sm:text-lg font-bold text-gray-800 text-center">
+          {mainService?.name ?? "Foreign Ministry - Oman"}
+        </h1>
+
+        <div className="flex items-center gap-3">
+          <div className="text-xs font-semibold text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
+            Step {currentStep} of 4
+          </div>
+          <button
+            onClick={handleLogout}
+            title="Sign Out"
+            className="text-xs text-gray-500 hover:text-red-600 font-medium px-2 py-1 transition-colors cursor-pointer"
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
 
       <Stepper currentStep={currentStep} />
 
       {stage === "picking" && (
-        <div className="mx-auto max-w-4xl rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="animate-fade-in-up mx-auto max-w-4xl rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-md">
+          <div className="border-b border-slate-100 pb-5 mb-6">
+            <span className="inline-block text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-3 py-1 rounded-full border border-teal-200">
+              Step 1 of 4
+            </span>
+            <h2 className="text-xl font-bold text-slate-900 mt-2">
+              Select Attestation Service
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              Choose the Foreign Ministry or Diplomatic Embassy Mission and select your service category.
+            </p>
+          </div>
+
           {!mainService && (
             <div className="flex flex-col gap-2">
-              <label className="pl-1 text-sm text-gray-600" htmlFor="main-service">
-                Please select the service
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-700" htmlFor="main-service">
+                Embassy / Ministry Service <span className="text-red-500">*</span>
               </label>
-              <select
-                id="main-service"
-                className="w-full rounded border border-gray-300 px-4 py-2 text-sm"
-                value={mainServiceId}
-                onChange={(e) => handleMainServiceChange(e.target.value)}
-              >
-                <option value="" disabled>
-                  Select or search a service...
-                </option>
-                {mainServices.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <select
+                  id="main-service"
+                  className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50/60 py-3 pl-10 pr-10 text-sm font-medium text-slate-900 hover:bg-slate-50 focus:border-teal-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-teal-500/10 transition-all cursor-pointer shadow-xs"
+                  value={mainServiceId}
+                  onChange={(e) => handleMainServiceChange(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select or search a service...
                   </option>
-                ))}
-              </select>
+                  {mainServices.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                  </svg>
+                </div>
+              </div>
             </div>
           )}
 
           {mainService && mainService.categories && (
-            <div className="flex flex-col gap-2">
-              <label className="pl-1 text-sm text-orange-500" htmlFor="category">
-                Select or search a Service Category in the list...
+            <div className="flex flex-col gap-2 mt-4">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-700" htmlFor="category">
+                Service Category <span className="text-red-500">*</span>
               </label>
-              <select
-                id="category"
-                className="w-full rounded border border-gray-300 px-4 py-2 text-sm"
-                value={categoryId}
-                onChange={(e) => handleCategoryChange(e.target.value)}
-              >
-                <option value="" disabled>
-                  Select or search a Service Category in the list...
-                </option>
-                {mainService.categories.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-teal-600">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <select
+                  id="category"
+                  className="w-full appearance-none rounded-xl border border-teal-300 bg-teal-50/30 py-3 pl-10 pr-10 text-sm font-semibold text-slate-900 hover:bg-teal-50/60 focus:border-teal-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-teal-500/15 transition-all cursor-pointer shadow-xs"
+                  value={categoryId}
+                  onChange={(e) => handleCategoryChange(e.target.value)}
+                >
+                  <option value="" disabled>
+                    Select or search a Service Category in the list...
                   </option>
-                ))}
-              </select>
+                  {mainService.categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-teal-600">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                  </svg>
+                </div>
+              </div>
             </div>
           )}
 
           {mainService && (
-            <p className="mt-4 rounded border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-600">
-              Make sure all pre-requisite attestation steps are completed before applying for Oman
-              Embassy / Foreign Ministry Attestation
-            </p>
+            <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50/80 p-4 text-xs text-amber-900 flex items-start gap-3">
+              <div className="h-5 w-5 rounded-full bg-amber-200/80 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+              </div>
+              <p className="leading-relaxed">
+                Make sure all pre-requisite attestation steps are completed before applying for Oman
+                Embassy / Foreign Ministry Attestation.
+              </p>
+            </div>
           )}
 
           <button
             type="button"
-            className="mt-4 w-full rounded bg-slate-800 px-4 py-2 text-left text-sm font-medium text-white hover:bg-slate-900"
+            className="mt-5 w-full rounded-xl bg-slate-900 p-3.5 text-left text-sm font-semibold text-white hover:bg-slate-800 transition-colors shadow-sm flex items-center justify-between cursor-pointer"
           >
-            How To Apply - Link
+            <div className="flex items-center gap-2.5">
+              <svg className="h-4 w-4 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>How To Apply - Step-by-Step Guide</span>
+            </div>
+            <svg className="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
           </button>
 
           {mainService && !mainService.categories && (
-            <p className="mt-4 text-sm text-gray-500">
-              This embassy's service list isn't wired up in this demo yet — pick
-              &ldquo;Foreign Ministry - Oman&rdquo; to see the full flow.
+            <p className="mt-4 text-xs text-slate-500 rounded-lg bg-slate-50 p-3 border border-slate-200">
+              This embassy's service list is scheduled for upcoming rollout — select
+              &ldquo;Foreign Ministry - Oman&rdquo; to view full attestation flow.
             </p>
           )}
         </div>
       )}
 
       {stage === "form" && selectedRequest && (
-        <ApplicationForm
-          request={selectedRequest}
-          defaultValues={formData ?? undefined}
-          onBack={() => setStage("picking")}
-          onSubmit={handleFormSubmit}
-        />
+        <div className="animate-fade-in-up">
+          <ApplicationForm
+            request={selectedRequest}
+            defaultValues={formData ?? undefined}
+            onBack={() => setStage("picking")}
+            onSubmit={handleFormSubmit}
+          />
+        </div>
       )}
 
       {stage === "submitted" && selectedRequest && (
-        <div className="mx-auto max-w-4xl rounded-xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
+        <div className="animate-fade-in-up mx-auto max-w-4xl rounded-xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-700 mb-2 border border-teal-200">
               <span className="h-2 w-2 rounded-full bg-teal-500 animate-pulse"></span>
@@ -472,104 +641,153 @@ export default function Home() {
           </div>
         </div>
       )}
-
-      {/* Step: choose the specific service request */}
       {showRequestModal && category && (
-        <Modal>
-          <h2 className="pt-6 text-center text-lg font-semibold text-gray-800">
-            {category.name}
-          </h2>
-          <div className="mt-4 flex items-center justify-between bg-teal-500 px-6 py-3">
-            <h3 className="text-sm font-semibold text-white">Select a Service Request in the list</h3>
-            <button
-              aria-label="Close"
-              className="text-white hover:opacity-80"
-              onClick={() => {
-                setShowRequestModal(false);
-                setCategoryId("");
-              }}
-            >
-              ✕
-            </button>
+        <Modal onClose={() => { setShowRequestModal(false); setCategoryId(""); }}>
+          <div className="p-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
+                  Service Category
+                </span>
+                <h2 className="text-lg font-bold text-slate-900 mt-1.5">
+                  {category.name}
+                </h2>
+              </div>
+              <button
+                aria-label="Close"
+                className="h-8 w-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 flex items-center justify-center transition-colors cursor-pointer"
+                onClick={() => {
+                  setShowRequestModal(false);
+                  setCategoryId("");
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="pt-3 pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              Select your required document or request type
+            </p>
+
+            <ul className="max-h-80 divide-y divide-slate-100 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50/50">
+              {category.requests.map((req) => (
+                <li key={req.id}>
+                  <button
+                    className="w-full p-4 text-left hover:bg-teal-50/80 transition-all flex items-center justify-between group cursor-pointer"
+                    onClick={() => handleRequestSelect(req)}
+                  >
+                    <div className="flex items-center gap-3 pr-3">
+                      <div className="h-8 w-8 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center shrink-0 group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                        </svg>
+                      </div>
+                      <span className="text-sm font-semibold text-slate-800 group-hover:text-teal-900 transition-colors">
+                        {req.name}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-xs font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md border border-teal-200">
+                        From {(req.govFee + req.serviceFee + req.vatAmount).toFixed(2)} OMR
+                      </span>
+                      <svg className="h-4 w-4 text-slate-400 group-hover:text-teal-700 group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                      </svg>
+                    </div>
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
-          <p className="px-6 pt-3 text-sm text-gray-500">Select or search a Service Request in the list...</p>
-          <ul className="max-h-80 divide-y divide-gray-100 overflow-y-auto px-2 pb-4">
-            {category.requests.map((req, i) => (
-              <li key={req.id}>
-                <button
-                  className={`w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-teal-50 ${
-                    i % 2 === 1 ? "bg-gray-50" : ""
-                  }`}
-                  onClick={() => handleRequestSelect(req)}
-                >
-                  {req.name}
-                </button>
-              </li>
-            ))}
-          </ul>
         </Modal>
       )}
 
       {/* Step: confirm fees before proceeding */}
       {showFeeModal && selectedRequest && (
-        <Modal>
-          <h2 className="pt-6 text-center text-lg font-semibold text-gray-800">
-            {category?.name}
-          </h2>
-          <div className="mt-4 flex items-center justify-between bg-teal-500 px-6 py-3">
-            <h3 className="text-sm font-semibold text-white">Service Request Name</h3>
-            <button
-              aria-label="Close"
-              className="text-white hover:opacity-80"
-              onClick={handleCancelFee}
-            >
-              ✕
-            </button>
-          </div>
-          <div className="px-6 py-4">
-            <p className="rounded border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700">
-              {selectedRequest.name}
-            </p>
-
-            <div className="mt-5 grid grid-cols-4 gap-4 text-center">
-              <FeeCell label="Document Name" value={selectedRequest.name} isName />
-             <div>
-             
-               <FeeCell label="Government Fees" value={selectedRequest.govFee.toFixed(2)} />
-             </div>
-              <FeeCell label="Service Fees" value={selectedRequest.serviceFee.toFixed(2)} />
-               <FeeCell label="VAT Amount" value={selectedRequest.vatAmount.toFixed(2)} />
-            </div>
-            <div className="mt-4 flex justify-center">
-             
+        <Modal onClose={handleCancelFee}>
+          <div className="p-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
+                  Fee Confirmation
+                </span>
+                <h2 className="text-lg font-bold text-slate-900 mt-1.5">
+                  Review Official Attestation Fees
+                </h2>
+              </div>
+              <button
+                aria-label="Close"
+                className="h-8 w-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-800 flex items-center justify-center transition-colors cursor-pointer"
+                onClick={handleCancelFee}
+              >
+                ✕
+              </button>
             </div>
 
-            <div className="mt-6 flex justify-end gap-3">
+            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                Selected Document
+              </span>
+              <p className="text-sm font-bold text-slate-900 mt-0.5">
+                {selectedRequest.name}
+              </p>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="rounded-xl border border-slate-200 bg-white p-3.5 text-center shadow-xs">
+                <span className="text-xs text-slate-500 font-medium">Gov Fee</span>
+                <p className="mt-1 text-sm font-bold text-slate-900 flex items-center justify-center gap-1">
+                  {selectedRequest.govFee.toFixed(2)}
+                  <Image width={14} height={14} src={OmaniRiel} alt="OMR" className="inline-block" />
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-white p-3.5 text-center shadow-xs">
+                <span className="text-xs text-slate-500 font-medium">Service Fee</span>
+                <p className="mt-1 text-sm font-bold text-slate-900 flex items-center justify-center gap-1">
+                  {selectedRequest.serviceFee.toFixed(2)}
+                  <Image width={14} height={14} src={OmaniRiel} alt="OMR" className="inline-block" />
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-white p-3.5 text-center shadow-xs">
+                <span className="text-xs text-slate-500 font-medium">VAT (5%)</span>
+                <p className="mt-1 text-sm font-bold text-slate-900 flex items-center justify-center gap-1">
+                  {selectedRequest.vatAmount.toFixed(2)}
+                  <Image width={14} height={14} src={OmaniRiel} alt="OMR" className="inline-block" />
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-teal-300 bg-teal-50/60 p-3.5 text-center shadow-xs">
+                <span className="text-xs text-teal-800 font-bold">Total Amount</span>
+                <p className="mt-1 text-sm font-black text-teal-900 flex items-center justify-center gap-1">
+                  {(selectedRequest.govFee + selectedRequest.serviceFee + selectedRequest.vatAmount).toFixed(2)}
+                  <Image width={14} height={14} src={OmaniRiel} alt="OMR" className="inline-block" />
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-100">
               <button
                 onClick={handleCancelFee}
-                className="rounded border border-teal-500 px-5 py-2 text-sm font-medium text-teal-600 hover:bg-teal-50"
+                className="rounded-xl border border-slate-300 px-5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
               >
-                Cancel
+                Back to List
               </button>
               <button
                 onClick={handleProceed}
-                className="rounded bg-teal-500 px-5 py-2 text-sm font-medium text-white hover:bg-teal-600"
+                className="rounded-xl bg-teal-600 px-6 py-2.5 text-xs font-bold text-white shadow-md hover:bg-teal-700 transition-all cursor-pointer flex items-center gap-2"
               >
-                Proceed
+                <span>Proceed to Form</span>
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
               </button>
             </div>
           </div>
         </Modal>
       )}
-    </div>
-  );
-}
-
-function FeeCell({ label, value, isName }: { label: string; value: string; isName?: boolean }) {
-  return (
-    <div>
-      <p className="text-xs text-gray-500">{label}</p>
-      <p className={`mt-1 flex justify-center items-center gap-2 font-medium text-gray-800 ${isName ? "text-sm" : "text-sm"}`}> {value} {isName ||  <Image width={20} height={20} src={OmaniRiel} alt="omani-riel"/> } </p>
     </div>
   );
 }

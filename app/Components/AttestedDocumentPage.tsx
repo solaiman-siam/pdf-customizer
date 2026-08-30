@@ -109,7 +109,7 @@ export default function AttestedDocumentPage({
       </div>
 
       {/* Bottom Part: Official Attestation Sticker & Footer (approx 36% of A4 page) */}
-      <div className="w-full flex-shrink-0">
+      <div className="w-full shrink-0">
         <AttestationCertificate data={data} />
       </div>
     </div>
