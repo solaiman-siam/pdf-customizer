@@ -21,11 +21,11 @@ export default function AttestedDocumentPage({
       id={id}
       className={`mx-auto flex flex-col justify-between overflow-hidden shadow-2xl ${className}`}
       style={{
-        width: "794px", // Standard A4 width at 96 DPI
-        minHeight: "1123px", // Standard A4 height at 96 DPI
-        height: "1123px",
+        width: "694px", // Standard A4 width at 96 DPI
+        minHeight: "1000px", // Standard A4 height at 96 DPI
+        height: "1000px",
         boxSizing: "border-box",
-        padding: "16px 20px 16px 20px",
+        padding: "1px 20px 16px 20px",
         backgroundColor: "#ffffff",
         color: "#0f172a",
         fontFamily: "Arial, Helvetica, sans-serif",
@@ -33,11 +33,11 @@ export default function AttestedDocumentPage({
     >
       {/* Top Part: Uploaded Document (approx 64% of A4 page with left/right gap to preserve aspect ratio) */}
       <div
-        className="relative flex-1 w-full flex flex-col items-center justify-center overflow-hidden mb-2"
+        className="relative flex-1 w-full flex flex-col items-center  overflow-hidden mb-2"
         style={{
           backgroundColor: "#ffffff",
           minHeight: "680px",
-          padding: "4px 32px 4px 32px", // Left and right gaps
+          padding: "0px", // Left and right gaps
           boxSizing: "border-box",
         }}
       >

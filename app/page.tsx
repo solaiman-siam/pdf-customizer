@@ -8,7 +8,7 @@ import Modal from "./Components/Modal";
 import AttestedDocumentPage from "./Components/AttestedDocumentPage";
 import { AttestationData } from "./Components/AttestationCertificate";
 import { generateAttestationPdf } from "@/lib/pdfGenerator";
-import { fileToDataUrl } from "@/lib/documentLoader";
+import { filesToDataUrls } from "@/lib/documentLoader";
 import Image from "next/image";
 import OmaniRiel from "@/app/assets/images/omani-real.png";
 
@@ -21,7 +21,7 @@ export default function Home() {
   const [showFeeModal, setShowFeeModal] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState<ServiceRequest | null>(null);
   const [formData, setFormData] = useState<ApplicationFormData | null>(null);
-  const [documentPreviewUrl, setDocumentPreviewUrl] = useState<string | null>(null);
+  const [documentPreviewUrls, setDocumentPreviewUrls] = useState<string[]>([]);
   const [stage, setStage] = useState<FlowStage>("picking");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
@@ -90,14 +90,14 @@ export default function Home() {
 
     if (data.documents && data.documents.length > 0) {
       try {
-        const url = await fileToDataUrl(data.documents[0]);
-        setDocumentPreviewUrl(url);
+        const urls = await filesToDataUrls(data.documents);
+        setDocumentPreviewUrls(urls);
       } catch (err) {
         console.error("Failed to load uploaded document preview:", err);
-        setDocumentPreviewUrl(null);
+        setDocumentPreviewUrls([]);
       }
     } else {
-      setDocumentPreviewUrl(null);
+      setDocumentPreviewUrls([]);
     }
 
     setStage("submitted");
@@ -109,8 +109,14 @@ export default function Home() {
     setDownloadSuccess(false);
 
     try {
+      const pageCount = documentPreviewUrls.length > 0 ? documentPreviewUrls.length : 1;
+      const elementIds = Array.from(
+        { length: pageCount },
+        (_, i) => `attested-document-pdf-${i}`
+      );
+
       await generateAttestationPdf(
-        "attested-document-pdf",
+        elementIds,
         `Oman_Attested_${attestationData.eVerifyNo}.pdf`
       );
       setDownloadSuccess(true);
@@ -367,19 +373,40 @@ export default function Home() {
                   Full Attested Document Preview (A4)
                 </h3>
                 <span className="text-xs text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full font-medium">
-                  Matches Reference Document
+                  {documentPreviewUrls.length > 1
+                    ? `${documentPreviewUrls.length} Pages • Attestation Added to All Pages`
+                    : "Matches Reference Document"}
                 </span>
               </div>
 
               {/* Scrollable Container with centered A4 preview */}
-              <div className="w-full overflow-x-auto rounded-xl border border-gray-300 bg-slate-100 p-4 md:p-8 flex justify-center shadow-inner">
-                <div className="transform scale-[0.85] sm:scale-100 origin-top">
-                  <AttestedDocumentPage
-                    id="attested-document-pdf"
-                    data={attestationData}
-                    documentUrl={documentPreviewUrl}
-                  />
-                </div>
+              <div className="w-full overflow-x-auto rounded-xl border border-gray-300 bg-slate-100 p-4 md:p-8 flex flex-col items-center gap-8 shadow-inner">
+                {documentPreviewUrls.length > 0 ? (
+                  documentPreviewUrls.map((url, idx) => (
+                    <div key={idx} className="flex flex-col items-center">
+                      {documentPreviewUrls.length > 1 && (
+                        <div className="mb-2 text-xs font-semibold text-gray-600 bg-white border border-gray-200 px-3 py-1 rounded-full shadow-sm">
+                          Page {idx + 1} of {documentPreviewUrls.length}
+                        </div>
+                      )}
+                      <div className="transform scale-[0.85] sm:scale-100 origin-top">
+                        <AttestedDocumentPage
+                          id={`attested-document-pdf-${idx}`}
+                          data={attestationData}
+                          documentUrl={url}
+                        />
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="transform scale-[0.85] sm:scale-100 origin-top">
+                    <AttestedDocumentPage
+                      id="attested-document-pdf-0"
+                      data={attestationData}
+                      documentUrl={null}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -57,13 +57,16 @@ function sanitizeModernColors(clonedDoc: Document): void {
   });
 }
 
+/**
+ * Generates an official Attestation PDF (single or multi-page)
+ */
 export async function generateAttestationPdf(
-  elementId: string,
+  elementIds: string | string[],
   fileName: string = "Oman_Attestation_Document.pdf"
 ): Promise<void> {
-  const element = document.getElementById(elementId);
-  if (!element) {
-    throw new Error(`Element with id "${elementId}" not found`);
+  const ids = Array.isArray(elementIds) ? elementIds : [elementIds];
+  if (ids.length === 0) {
+    throw new Error("No element IDs provided for PDF generation");
   }
 
   // Ensure fonts and images are ready
@@ -73,21 +76,6 @@ export async function generateAttestationPdf(
 
   // Wait a brief moment for QR code render or image decoding
   await new Promise((resolve) => setTimeout(resolve, 250));
-
-  // Render element to high-resolution canvas with onclone color sanitizer
-  const canvas = await html2canvas(element, {
-    scale: 2.5,
-    useCORS: true,
-    allowTaint: true,
-    logging: false,
-    backgroundColor: "#ffffff",
-    windowWidth: 1200,
-    onclone: (clonedDoc) => {
-      sanitizeModernColors(clonedDoc);
-    },
-  });
-
-  const imgData = canvas.toDataURL("image/png", 1.0);
 
   // A4 Portrait: 210mm x 297mm
   const pdf = new jsPDF({
@@ -99,7 +87,41 @@ export async function generateAttestationPdf(
   const pdfWidth = pdf.internal.pageSize.getWidth(); // 210
   const pdfHeight = pdf.internal.pageSize.getHeight(); // 297
 
-  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
+  let renderedPageCount = 0;
+
+  for (const id of ids) {
+    const element = document.getElementById(id);
+    if (!element) {
+      console.warn(`Element with id "${id}" not found, skipping`);
+      continue;
+    }
+
+    // Render element to high-resolution canvas with onclone color sanitizer
+    const canvas = await html2canvas(element, {
+      scale: 2.5,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      backgroundColor: "#ffffff",
+      windowWidth: 1200,
+      onclone: (clonedDoc) => {
+        sanitizeModernColors(clonedDoc);
+      },
+    });
+
+    const imgData = canvas.toDataURL("image/png", 1.0);
+
+    if (renderedPageCount > 0) {
+      pdf.addPage("a4", "portrait");
+    }
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
+    renderedPageCount++;
+  }
+
+  if (renderedPageCount === 0) {
+    throw new Error("Could not find any printable elements to generate PDF.");
+  }
 
   // Save the generated PDF
   pdf.save(fileName);

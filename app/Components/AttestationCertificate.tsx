@@ -2,6 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import QRCode from "qrcode";
+import { Carlito } from "next/font/google";
+import { images } from "@/lib/imageProvider";
+import Image from "next/image";
+
+const carlito = Carlito({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export interface AttestationData {
   eVerifyNo: string;
@@ -16,139 +25,17 @@ export interface AttestationData {
 export function OmanSeal({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`flex flex-col items-center  justify-center text-center ${className}`}
-      style={{ width: "115px" }}
+      className={`flex flex-col items-center  justify-center text-center ${carlito.className} ${className}`}
+      style={{ width: "95px" }}
     >
-      <svg
-        viewBox="0 0 200 200"
-        style={{ width: "105px", height: "105px" }}
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Outer Circular Border */}
-        <circle
-          cx="100"
-          cy="100"
-          r="92"
-          fill="#ffffff"
-          stroke="#94a3b8"
-          strokeWidth="1.5"
-        />
-        <circle
-          cx="100"
-          cy="100"
-          r="86"
-          fill="none"
-          stroke="#cbd5e1"
-          strokeWidth="0.8"
-        />
-
-        {/* Curved Text Paths */}
-        <defs>
-          <path
-            id="topCurve"
-            d="M 30,100 A 70,70 0 0,1 170,100"
-            fill="none"
-          />
-          <path
-            id="bottomCurve"
-            d="M 30,100 A 70,70 0 0,0 170,100"
-            fill="none"
-          />
-        </defs>
-
-        {/* Arabic Top: سلطنة عمان */}
-        <text
-          fill="#842b32"
-          fontSize="17"
-          fontWeight="bold"
-          fontFamily="system-ui, -apple-system, sans-serif"
-          letterSpacing="1"
-        >
-          <textPath href="#topCurve" startOffset="50%" textAnchor="middle">
-            سلطنة عُمان
-          </textPath>
-        </text>
-
-        {/* English Bottom: SULTANATE OF OMAN */}
-        <text
-          fill="#842b32"
-          fontSize="10.5"
-          fontWeight="600"
-          fontFamily="Arial, sans-serif"
-          letterSpacing="2.5"
-        >
-          <textPath href="#bottomCurve" startOffset="50%" textAnchor="middle">
-            SULTANATE OF OMAN
-          </textPath>
-        </text>
-
-        {/* Central Emblem of Oman (Khanjar & Crossed Swords) */}
-        <g transform="translate(100, 95) scale(0.58)" fill="#9e2a2b" stroke="#9e2a2b">
-          {/* Crossed Swords */}
-          {/* Sword 1 - Left to Right */}
-          <path
-            d="M-55,-35 Q-15,-5 45,35 L40,40 Q-20,0 -60,-30 Z"
-            fill="#a61c24"
-          />
-          <rect x="-68" y="-45" width="18" height="6" transform="rotate(35 -59 -42)" fill="#801319" />
-          <circle cx="-62" cy="-44" r="5" fill="#801319" />
-
-          {/* Sword 2 - Right to Left */}
-          <path
-            d="M55,-35 Q15,-5 -45,35 L-40,40 Q20,0 60,-30 Z"
-            fill="#a61c24"
-          />
-          <rect x="50" y="-45" width="18" height="6" transform="rotate(-35 59 -42)" fill="#801319" />
-          <circle cx="62" cy="-44" r="5" fill="#801319" />
-
-          {/* Central Khanjar */}
-          <path
-            d="M-10,-48 L10,-48 L8,-32 L13,-28 L-13,-28 L-8,-32 Z"
-            fill="#801319"
-          />
-          <line x1="-12" y1="-30" x2="12" y2="-30" stroke="#ffffff" strokeWidth="1.5" />
-          
-          <rect x="-16" y="-28" width="32" height="12" rx="3" fill="#a61c24" />
-          <circle cx="-9" cy="-22" r="3" fill="#ffffff" />
-          <circle cx="0" cy="-22" r="3" fill="#ffffff" />
-          <circle cx="9" cy="-22" r="3" fill="#ffffff" />
-
-          <path
-            d="M-14,-16 C-14,8 -10,22 12,38 C16,41 22,43 30,44 C26,48 18,48 10,46 C-14,40 -20,18 -18,-16 Z"
-            fill="#a61c24"
-          />
-          <path
-            d="M-12,-10 C-10,4 -6,14 10,28"
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth="1.2"
-          />
-          <path
-            d="M-8,-2 C-6,8 -2,16 12,24"
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth="1.2"
-          />
-          <circle cx="28" cy="44" r="3" fill="#801319" />
-        </g>
-      </svg>
-
-      {/* Under-Seal Typography */}
-      <div className="mt-0.5 text-center leading-tight">
-        <p
-          className="text-[11px] font-bold font-serif"
-          style={{ color: "#9e2a2b" }}
-          dir="rtl"
-        >
-          وِزَارَةُ الخَارِجِيَّة
-        </p>
-        <p
-          className="text-[9px] font-semibold tracking-wide"
-          style={{ color: "#334155" }}
-        >
-          Foreign Ministry
-        </p>
-      </div>
+      <Image
+        src={images.OmanLogo}
+        alt="Oman Seal"
+        width={70}
+        height={70}
+        className=" -ml-0"
+        style={{ width: "auto", height: "auto" }}
+      />
     </div>
   );
 }
@@ -162,20 +49,24 @@ interface AttestationCardProps {
  * The official Attestation Card (sticker box) with gold top banner,
  * Oman seal on the left, and 3-column table on the right.
  */
-export function AttestationCard({ data, className = "" }: AttestationCardProps) {
+export function AttestationCard({
+  data,
+  className = "",
+}: AttestationCardProps) {
   return (
     <div
-      className={`relative ${className} pr-8`}
+      className={`relative  ${carlito.className} ${className} pr-8`}
       style={{
-        width: "430px",
+        width: "380px",
         backgroundColor: "#ffffff",
         color: "#0f172a",
-        fontFamily: "Arial, Helvetica, sans-serif",
+        fontFamily:
+          "var(--font-carlito), Carlito, Arial, Helvetica, sans-serif",
       }}
     >
       {/* Outer Border Box */}
       <div
-        className="relative -mt-14 pb-2 px-2.5"
+        className="relative -mt-14 pb-8 px-2.5"
         style={{
           border: "1.5px solid #8ca3b3",
           borderRadius: "1px",
@@ -183,30 +74,32 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
       >
         {/* Top Gold / Ochre Banner */}
         <div
-          className="mx-auto -mt-4  py-1 px-3 text-center shadow-sm"
+          className="mx-auto -mt-4 pt-0 pb-1 px-3 text-center shadow-sm"
           style={{
             width: "82%",
             maxWidth: "320px",
-            backgroundColor: "#ba9b56",
+            backgroundColor: "#c2a76e",
             color: "#ffffff",
             borderRadius: "0 0 2px 2px",
           }}
         >
           <p
-            className="text-[11.5px] font-bold leading-tight tracking-normal"
+            className="text-[9px] font-bold leading-tight tracking-normal"
             dir="rtl"
             style={{
-              fontFamily: "'Traditional Arabic', 'Segoe UI', Tahoma, sans-serif",
+              fontFamily:
+                "'Traditional Arabic', 'Segoe UI', Tahoma, sans-serif",
               color: "#ffffff",
             }}
           >
             نصادق على صحة توقيع المسؤول والختم
           </p>
           <p
-            className="text-[9.5px] font-medium leading-tight mt-0.5"
+            className="text-[8.5px] font-medium leading-tight pb-1 mt-0 "
             dir="rtl"
             style={{
-              fontFamily: "'Traditional Arabic', 'Segoe UI', Tahoma, sans-serif",
+              fontFamily:
+                "'Traditional Arabic', 'Segoe UI', Tahoma, sans-serif",
               color: "#ffffff",
             }}
           >
@@ -215,31 +108,37 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
         </div>
 
         {/* Main Card Row: Seal + Table */}
-        <div className="mt-1 flex relative items-center gap-3">
+        <div className="-mt-0.5 flex relative items-center gap-3">
           {/* Left Seal */}
-          <div className="shrink-0 top-1/2 -translate-y-1/2  -left-20 flex absolute justify-center pl-0.5" style={{ width: "138px" }}>
+          <div
+            className="shrink-0 top-1/2 -translate-y-1/2  -left-20 flex absolute justify-center pl-0.5"
+            style={{ width: "138px" }}
+          >
             <OmanSeal />
           </div>
 
           {/* Center/Right Table */}
           <div className="flex-1 pl-11 pr-1">
-            <table className="w-full border-collapse" style={{ fontSize: "10.5px" }}>
+            <table
+              className="w-full border-collapse"
+              style={{ fontSize: "9.5px" }}
+            >
               <tbody>
                 <tr>
                   <td
-                    className="py-0.5 text-left font-bold whitespace-nowrap"
-                    style={{ width: "125px", color: "#0f172a" }}
+                    className=" text-left font-extrabold whitespace-nowrap"
+                    style={{ width: "45px", color: "#0f172a" }}
                   >
                     e-Verify No
                   </td>
                   <td
-                    className="py-0.5 px-1.5 text-left text-nowrap font-bold"
+                    className=" px-1.5 text-left text-nowrap font-bold"
                     style={{ color: "#000000", width: "140px" }}
                   >
                     {data.eVerifyNo}
                   </td>
                   <td
-                    className="py-0.5 text-right font-bold whitespace-nowrap"
+                    className=" text-left font-bold whitespace-nowrap align-top"
                     style={{ width: "125px", color: "#0f172a" }}
                     dir="rtl"
                   >
@@ -249,19 +148,19 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
 
                 <tr>
                   <td
-                    className="py-0.5 text-left font-bold whitespace-nowrap"
+                    className=" text-left font-bold whitespace-nowrap"
                     style={{ color: "#0f172a" }}
                   >
                     Verify By
                   </td>
                   <td
-                    className="py-0.5 px-1.5 text-left font-bold"
+                    className=" px-1.5 text-left font-bold"
                     style={{ color: "#000000", width: "140px" }}
                   >
                     {data.verifyBy}
                   </td>
                   <td
-                    className="py-0.5 text-right font-bold whitespace-nowrap"
+                    className=" text-left font-bold whitespace-nowrap align-top"
                     style={{ color: "#0f172a" }}
                     dir="rtl"
                   >
@@ -271,19 +170,19 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
 
                 <tr>
                   <td
-                    className="py-0.5 text-left font-bold whitespace-nowrap"
+                    className=" text-left font-bold whitespace-nowrap"
                     style={{ color: "#0f172a" }}
                   >
                     Verify at
                   </td>
                   <td
-                    className="py-0.5 px-1.5 text-left font-bold"
+                    className=" px-1.5 text-left font-bold"
                     style={{ color: "#000000", width: "140px" }}
                   >
                     {data.verifyAt}
                   </td>
                   <td
-                    className="py-0.5 text-right font-bold whitespace-nowrap"
+                    className=" text-left font-bold whitespace-nowrap align-top"
                     style={{ color: "#0f172a" }}
                     dir="rtl"
                   >
@@ -293,20 +192,20 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
 
                 <tr>
                   <td
-                    className="py-0.5 text-wrap text-left justify-start font-bold whitespace-nowrap"
+                    className=" text-wrap text-left justify-start font-bold whitespace-nowrap"
                     style={{ color: "#0f172a" }}
                   >
-                    Applicant <br /> 
+                    Applicant <br />
                     Name
                   </td>
                   <td
-                    className="py-0.5 px-1.5 flex text-left justify-start text-nowrap font-bold uppercase"
+                    className=" px-1.5 flex text-left justify-start text-nowrap font-bold uppercase"
                     style={{ color: "#000000", width: "140px" }}
                   >
                     {data.applicantName}
                   </td>
                   <td
-                    className="py-0.5 text-right font-bold whitespace-nowrap"
+                    className=" text-left font-bold whitespace-nowrap align-top"
                     style={{ color: "#0f172a" }}
                     dir="rtl"
                   >
@@ -316,21 +215,20 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
 
                 <tr>
                   <td
-                    className="py-0.5 text-left font-bold align-top whitespace-nowrap"
+                    className=" text-left font-bold align-top whitespace-nowrap"
                     style={{ color: "#0f172a" }}
                   >
                     Document <br /> Name
                   </td>
                   <td
-
-                    className="py-0.5 px-1.5 flex text-left w-full font-bold align-top leading-snug"
-                    style={{ color: "#000000", width: "140px" }}
+                    className=" px-1.5 flex text-left w-full font-bold align-top leading-snug"
+                    style={{ color: "#000000", width: "150px" }}
                   >
                     {data.documentName}
                   </td>
                   <td
-                    className="py-0.5 text-right font-bold align-top whitespace-nowrap"
-                    style={{ color: "#0f172a"}}
+                    className=" text-left font-bold align-top "
+                    style={{ color: "#0f172a" }}
                     dir="rtl"
                   >
                     اسم الوثيقة
@@ -339,19 +237,19 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
 
                 <tr>
                   <td
-                    className="py-0.5 text-left h-fit font-bold whitespace-nowrap"
+                    className=" text-left h-fit font-bold "
                     style={{ color: "#0f172a" }}
                   >
                     Date of <br /> Attestation
                   </td>
                   <td
-                    className="py-0.5 px-1.5 text-left flex text-nowrap font-bold"
+                    className=" px-1.5 text-left flex text-nowrap font-bold"
                     style={{ color: "#000000", width: "140px" }}
                   >
                     {data.dateOfAttestation}
                   </td>
                   <td
-                    className="py-0.5 text-right font-bold whitespace-nowrap"
+                    className=" text-left font-bold align-top"
                     style={{ color: "#0f172a" }}
                     dir="rtl"
                   >
@@ -361,19 +259,19 @@ export function AttestationCard({ data, className = "" }: AttestationCardProps) 
 
                 <tr>
                   <td
-                    className="py-0.5 text-left font-bold whitespace-nowrap"
+                    className=" text-left font-bold whitespace-nowrap"
                     style={{ color: "#0f172a" }}
                   >
-                    Approver Name
+                    Approver <br /> Name
                   </td>
                   <td
-                    className="py-0.5 px-1.5 text-left font-bold"
-                    style={{ color: "#000000", width: "140px" }}
+                    className=" px-1.5 text-left flex font-bold"
+                    style={{ color: "#000000", width: "150px" }}
                   >
                     {data.approverName}
                   </td>
                   <td
-                    className="py-0.5 text-right font-bold whitespace-nowrap"
+                    className=" text-left font-bold whitespace-nowrap align-top"
                     style={{ color: "#0f172a" }}
                     dir="rtl"
                   >
@@ -401,35 +299,29 @@ export default function AttestationCertificate({
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
 
   useEffect(() => {
-    const payload = JSON.stringify({
-      verificationNo: data.eVerifyNo,
-      applicant: data.applicantName,
-      document: data.documentName,
-      verifyAt: data.verifyAt,
-      date: data.dateOfAttestation,
-      approver: data.approverName,
-      issuer: "Foreign Ministry - Sultanate of Oman",
-    });
+    const qrContent = data.eVerifyNo
+      ? `https://verify.fm.gov.om/attestation?id=${encodeURIComponent(data.eVerifyNo)}`
+      : "https://verify.fm.gov.om/attestation";
 
-    QRCode.toDataURL(
-      `https://verify.fm.gov.om/attestation?id=${encodeURIComponent(
-        data.eVerifyNo
-      )}&payload=${encodeURIComponent(payload)}`,
-      {
-        width: 300,
-        margin: 1,
-        color: {
-          dark: "#000000",
-          light: "#ffffff",
-        },
-      }
-    )
+    QRCode.toDataURL(qrContent, {
+      width: 300,
+      margin: 1,
+      errorCorrectionLevel: "M",
+      color: {
+        dark: "#000000",
+        light: "#ffffff",
+      },
+    })
       .then((url) => setQrCodeUrl(url))
       .catch((err) => console.error("QR Code Error:", err));
-  }, [data]);
+  }, [data.eVerifyNo]);
 
   return (
-    <div id={id} className={`w-full ${className}`}>
+    <div
+      id={id}
+      className={`w-full ${carlito.className} ${className}`}
+      style={{ fontFamily: "var(--font-carlito), Carlito, Arial, sans-serif" }}
+    >
       {/* Right-aligned Attestation Card */}
       <div className="flex justify-end w-full">
         <AttestationCard data={data} />
@@ -442,42 +334,59 @@ export default function AttestationCertificate({
           borderTop: "1.5px solid #4a687d",
           width: "72%",
           marginLeft: "auto",
-          marginRight: "40px"
+          marginRight: "40px",
         }}
       />
 
       {/* Bottom Footer: Left = Blockchain Verified, Right = Arabic Text & QR Code */}
-      <div className="w-full mt-2 flex items-center justify-between gap-3">
+      <div className="w-full  flex items-center justify-between gap-3">
         {/* Far Left: Blockchain Verified */}
         <div
           className="flex items-center gap-1.5 font-semibold"
           style={{ fontSize: "11px", color: "#64748b" }}
         >
-          
           <span style={{ color: "#64748b" }}>Blockchain Verified</span>
           <svg
-            className="w-4 h-4"
-            style={{ color: "#10b981" }}
-            viewBox="0 0 24 24"
+          className="-mb-4"
+            width="20"
+            height="20"
+            viewBox="0 0 80 80"
             fill="none"
-            stroke="#10b981"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            <path d="M9 12l2 2 4-4" />
+            <path
+              d="M40 5
+       C40 5 31 14 18 14
+       H12
+       V37
+       C12 55 23 68 40 75
+       C57 68 68 55 68 37
+       V14
+       H62
+       C49 14 40 5 40 5Z"
+              stroke="#B5D3A7"
+              strokeWidth="6"
+              strokeLinejoin="round"
+            />
+
+            <path
+              d="M27 39L36 48L54 30"
+              stroke="#B5D3A7"
+              strokeWidth="7"
+              strokeLinecap="square"
+              strokeLinejoin="miter"
+            />
           </svg>
         </div>
 
         {/* Right Section: Arabic Notice & QR Code */}
-        <div className="flex relative z-50 -mt-6 mr-0 items-center gap-3">
+        <div className="flex relative z-50 -mt-4 mr-0 items-center gap-3">
           <div className="text-right" dir="rtl">
             <p
               className="font-bold tracking-wide"
               style={{ fontSize: "13px", color: "#000000" }}
             >
-              بالرقم تصديق :{" "}
+              تصديق بالرقم :{" "}
               <span
                 className="font-mono font-extrabold"
                 style={{ fontSize: "13.5px", color: "#000000" }}
@@ -489,36 +398,40 @@ export default function AttestationCertificate({
               className="mt-0.5 font-bold leading-normal"
               style={{ fontSize: "11.5px", color: "#000000" }}
             >
-              تم إنجاز المعاملة إلكترونيا و للتأكد من صحة المعاملة يمكنك مسح الباركود{" "}
-              <span className="font-sans font-bold" dir="ltr" style={{ color: "#000000" }}>
+              تم إنجاز المعاملة إلكترونيا و للتأكد من صحة المعاملة يمكنك مسح
+              الباركود{" "}
+              <span
+                className="font-bold"
+                dir="ltr"
+                style={{ color: "#000000" }}
+              >
                 (QR Code)
               </span>
             </p>
           </div>
 
           {/* QR Code */}
-          <div
-            className="flex-shrink-0 flex items-center justify-center p-0.5"
-            style={{
-              backgroundColor: "#ffffff",
-              border: "1px solid #d1d5db",
-            }}
-          >
+          <div className="flex-shrink-0 -mt-1 flex items-center justify-center bg-white">
             {qrCodeUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={qrCodeUrl}
                 alt="Verification QR Code"
-                
-                style={{ width: "68px", height: "68px", objectFit: "contain" }}
+                style={{
+                  width: "75px",
+                  border: "5px solid #ffffff28",
+
+                  height: "75px",
+                  objectFit: "contain",
+                }}
               />
             ) : (
               <div
                 style={{
-                  width: "68px",
-                  height: "68px",
+                  width: "70px",
+                  height: "70px",
                   backgroundColor: "#f3f4f6",
-                  color: "#9ca3af",
+                  color: "#FFFF",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
