@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { images } from "@/lib/imageProvider";
+import Link from "next/link";
 
 interface HomePageProps {
   onApply: (mainServiceId?: string, categoryId?: string) => void;
@@ -90,6 +91,7 @@ export default function HomePage({ onApply, onLogout, userEmail }: HomePageProps
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
           </button>
+         
         </div>
       </header>
 
@@ -114,11 +116,10 @@ export default function HomePage({ onApply, onLogout, userEmail }: HomePageProps
 
         {/* Primary Call to Action */}
         <div className="pt-2 flex flex-col sm:flex-row items-center gap-4">
-          <button
-            onClick={() => onApply()}
+          <Link href={'/pdf'}
             className="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-teal-400 via-teal-500 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 px-8 py-4 text-base sm:text-lg font-extrabold text-slate-950 shadow-2xl shadow-teal-500/40 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
           >
-            <span>Apply for Attestation</span>
+            <span>Pdf Gallary</span>
             <svg
               className="h-5 w-5"
               fill="none"
@@ -128,7 +129,7 @@ export default function HomePage({ onApply, onLogout, userEmail }: HomePageProps
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
-          </button>
+          </Link>
         </div>
 
         {/* Feature Highlights Pill Row */}

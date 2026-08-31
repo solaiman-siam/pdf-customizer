@@ -3,6 +3,10 @@
 import { ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { ServiceRequest, branches, applyingFromOptions } from "@/lib/data";
+import { useMutation } from "@tanstack/react-query";
+import { submitPdf } from "../services/pdfApi";
+import { IPdf } from "../types/pdfType";
+import toast from "react-hot-toast";
 
 export type ApplicationFormData = {
   applicantName: string;
@@ -16,6 +20,11 @@ export type ApplicationFormData = {
   verifyAt: string;
   dateOfAttestation: string;
   approverName: string;
+  documentName?: string;
+  paymentId: string;
+  totalPayment: string;
+  transactionDate: string;
+  originalPdf?: FileList;
   documents?: FileList;
 };
 
@@ -32,6 +41,13 @@ export default function ApplicationForm({
   onSubmit,
   defaultValues,
 }: ApplicationFormProps) {
+  const calculatedTotal = `${(request.govFee + request.serviceFee + request.vatAmount).toFixed(2)} OMR`;
+  const defaultTxDate = new Date().toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
   const {
     register,
     handleSubmit,
@@ -46,17 +62,51 @@ export default function ApplicationForm({
       applyingFrom: "",
       taxRegistrationNumber: "",
       eVerifyNo: "",
-      verifyBy: "",
+      verifyBy: "Foreign Ministry - Oman",
       verifyAt: "",
       dateOfAttestation: "",
       approverName: "",
+      documentName: request.name,
+      paymentId: "",
+      totalPayment: calculatedTotal,
+      transactionDate: defaultTxDate,
     },
   });
 
-  const watchedFiles = watch("documents");
-  const fileList = watchedFiles && watchedFiles.length > 0 ? Array.from(watchedFiles) : [];
+  const watchedOriginalFiles = watch("originalPdf");
+  const originalFileList =
+    watchedOriginalFiles && watchedOriginalFiles.length > 0
+      ? Array.from(watchedOriginalFiles)
+      : [];
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: IPdf) => submitPdf(data),
+    onSuccess: (data) => {
+      toast.success("Pdf created successfully");
+      console.log("Mutation Success Response:", data);
+    },
+    onError: (err) => {
+      toast.error("Failed to create pdf");
+      console.error("Mutation Error:", err);
+    },
+  });
 
   const handleFormSubmit = (data: ApplicationFormData) => {
+    const fullPayload: IPdf = {
+      ...data,
+      documentName: data.documentName || request.name,
+      paymentId: data.paymentId || "",
+      totalPayment: data.totalPayment || calculatedTotal,
+      transactionDate: data.transactionDate || defaultTxDate,
+      taxRegistrationNumber: data.taxRegistrationNumber || "",
+      originalPdf: data.originalPdf,
+    };
+
+    console.log("=== FORM SUBMISSION ALL DATA ===");
+    console.log(fullPayload);
+    console.log("Original PDF File:", fullPayload.originalPdf ? Array.from(fullPayload.originalPdf).map(f => f.name) : "None");
+    console.log("================================");
+
     onSubmit(data);
   };
 
@@ -86,7 +136,7 @@ export default function ApplicationForm({
             {request.name}
           </h2>
           <p className="text-xs text-slate-300 mt-1">
-            Complete the applicant details and attestation verification data below.
+            Complete the applicant details, payment transaction, and attestation verification data below.
           </p>
         </div>
 
@@ -219,11 +269,52 @@ export default function ApplicationForm({
           </div>
         </div>
 
-        {/* Section 2: Attestation & Verification Data */}
+        {/* Section 2: Transaction & Payment Details */}
         <div>
           <div className="flex items-center gap-2 border-b border-slate-200 pb-3 mb-5">
             <div className="h-7 w-7 rounded-lg bg-teal-100 text-teal-800 font-bold flex items-center justify-center text-xs">
               2
+            </div>
+            <h3 className="text-base font-bold text-slate-900">
+              Transaction & Payment Details
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            <Field label="Payment ID" required error={errors.paymentId?.message}>
+              <input
+                type="text"
+                placeholder="e.g. 202623821432105"
+                className={getInputClass(!!errors.paymentId)}
+                {...register("paymentId", { required: "Payment ID is required" })}
+              />
+            </Field>
+
+            <Field label="Total Payment" required error={errors.totalPayment?.message}>
+              <input
+                type="text"
+                placeholder="e.g. OMR 20.50"
+                className={getInputClass(!!errors.totalPayment)}
+                {...register("totalPayment", { required: "Total payment is required" })}
+              />
+            </Field>
+
+            <Field label="Transaction Date" required error={errors.transactionDate?.message}>
+              <input
+                type="text"
+                placeholder="e.g. 26 Aug 2026"
+                className={getInputClass(!!errors.transactionDate)}
+                {...register("transactionDate", { required: "Transaction date is required" })}
+              />
+            </Field>
+          </div>
+        </div>
+
+        {/* Section 3: Attestation & Verification Data */}
+        <div>
+          <div className="flex items-center gap-2 border-b border-slate-200 pb-3 mb-5">
+            <div className="h-7 w-7 rounded-lg bg-teal-100 text-teal-800 font-bold flex items-center justify-center text-xs">
+              3
             </div>
             <h3 className="text-base font-bold text-slate-900">
               Official Attestation Sticker Metadata
@@ -277,14 +368,14 @@ export default function ApplicationForm({
           </div>
         </div>
 
-        {/* Section 3: Supporting Document Upload */}
+        {/* Section 4: Original Document Upload */}
         <div>
           <div className="flex items-center gap-2 border-b border-slate-200 pb-3 mb-5">
             <div className="h-7 w-7 rounded-lg bg-teal-100 text-teal-800 font-bold flex items-center justify-center text-xs">
-              3
+              4
             </div>
             <h3 className="text-base font-bold text-slate-900">
-              Supporting Document Upload
+              Original Document Upload
             </h3>
           </div>
 
@@ -299,33 +390,33 @@ export default function ApplicationForm({
               Upload Original Document (PDF or Images)
             </p>
             <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
-              Vertical A4 portrait documents recommended. Maximum upload size: 3MB per document.
+              Upload the original certificate/document. Vertical A4 portrait recommended. Maximum file size: 5MB.
             </p>
 
             <div className="mt-4 flex flex-col items-center gap-3">
               <label
-                htmlFor="documents-upload"
+                htmlFor="original-pdf-upload"
                 className="cursor-pointer inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white hover:bg-slate-800 transition-colors shadow-sm"
               >
-                <span>Browse Files</span>
+                <span>Browse Original File</span>
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
               </label>
               <input
-                id="documents-upload"
+                id="original-pdf-upload"
                 type="file"
                 multiple
                 accept=".pdf,.jpg,.jpeg,.png"
                 className="hidden"
-                {...register("documents", {
-                  required: "Please upload at least one document",
+                {...register("originalPdf", {
+                  required: "Please upload your original document",
                   validate: {
                     maxSize: (files?: FileList) => {
                       if (!files || files.length === 0) return true;
                       for (let i = 0; i < files.length; i++) {
-                        if (files[i].size > 3 * 1024 * 1024) {
-                          return `File "${files[i].name}" exceeds 3MB limit`;
+                        if (files[i].size > 5 * 1024 * 1024) {
+                          return `File "${files[i].name}" exceeds 5MB limit`;
                         }
                       }
                       return true;
@@ -334,9 +425,9 @@ export default function ApplicationForm({
                 })}
               />
 
-              {fileList.length > 0 && (
+              {originalFileList.length > 0 && (
                 <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
-                  {fileList.map((f, i) => (
+                  {originalFileList.map((f, i) => (
                     <span
                       key={i}
                       className="inline-flex items-center gap-1.5 rounded-lg bg-teal-50 border border-teal-200 px-3 py-1 text-xs font-semibold text-teal-800"
@@ -349,8 +440,8 @@ export default function ApplicationForm({
               )}
             </div>
 
-            {errors.documents?.message && (
-              <p className="mt-3 text-xs font-bold text-red-600">{errors.documents.message}</p>
+            {errors.originalPdf?.message && (
+              <p className="mt-3 text-xs font-bold text-red-600">{errors.originalPdf.message}</p>
             )}
           </div>
         </div>

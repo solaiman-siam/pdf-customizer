@@ -13,6 +13,9 @@ import Image from "next/image";
 import HomePage from "./Components/HomePage";
 import LoginPage, { LoginFormData } from "./Components/LoginPage";
 import OmaniRiel from "@/app/assets/images/omani-real.png";
+import { submitPdf } from "./services/pdfApi";
+import { IPdf } from "./types/pdfType";
+import toast from "react-hot-toast";
 
 type FlowStage = "home" | "picking" | "form" | "submitted";
 
@@ -58,7 +61,7 @@ export default function Home() {
     try {
       localStorage.removeItem("userAuth");
     } catch (err) {
-      console.error("Logout error:", err);
+      console.error("Logout failed:", err);
     }
     setIsAuthenticated(false);
     setUserEmail("");
@@ -69,6 +72,7 @@ export default function Home() {
     () => mainServices.find((s) => s.id === mainServiceId) ?? null,
     [mainServiceId]
   );
+
   const category: ServiceCategory | null = useMemo(
     () => mainService?.categories?.find((c) => c.id === categoryId) ?? null,
     [mainService, categoryId]
@@ -80,8 +84,8 @@ export default function Home() {
     if (!formData || !selectedRequest) return null;
 
     let formattedDate = formData.dateOfAttestation || "";
-    if (formattedDate && formattedDate.includes('T')) {
-      formattedDate = formattedDate.replace('T', ' ') + ':00';
+    if (formattedDate && formattedDate.includes("T")) {
+      formattedDate = formattedDate.replace("T", " ") + ":00";
     }
 
     return {
@@ -92,6 +96,13 @@ export default function Home() {
       documentName: selectedRequest.name,
       dateOfAttestation: formattedDate,
       approverName: formData.approverName,
+      serviceName: selectedRequest.name,
+      totalFee: (
+        selectedRequest.govFee +
+        selectedRequest.serviceFee +
+        selectedRequest.vatAmount
+      ).toFixed(2),
+      taxRegistrationNumber: formData.taxRegistrationNumber,
     };
   }, [formData, selectedRequest]);
 
@@ -124,12 +135,19 @@ export default function Home() {
   }
 
   async function handleFormSubmit(data: ApplicationFormData) {
-    console.log("Form Submitted Information:", data);
     setFormData(data);
 
-    if (data.documents && data.documents.length > 0) {
+    // Load preview from originalPdf (or fallback documents)
+    const previewFiles: File[] = [];
+    if (data.originalPdf && data.originalPdf.length > 0) {
+      previewFiles.push(...Array.from(data.originalPdf));
+    } else if (data.documents && data.documents.length > 0) {
+      previewFiles.push(...Array.from(data.documents));
+    }
+
+    if (previewFiles.length > 0) {
       try {
-        const urls = await filesToDataUrls(data.documents);
+        const urls = await filesToDataUrls(previewFiles as any);
         setDocumentPreviewUrls(urls);
       } catch (err) {
         console.error("Failed to load uploaded document preview:", err);
@@ -148,21 +166,59 @@ export default function Home() {
     setDownloadSuccess(false);
 
     try {
+      // 1. Generate the Attested PDF first to get the attested Blob
       const pageCount = documentPreviewUrls.length > 0 ? documentPreviewUrls.length : 1;
       const elementIds = Array.from(
         { length: pageCount },
         (_, i) => `attested-document-pdf-${i}`
       );
 
-      await generateAttestationPdf(
+      const attestedFileName = `Oman_Attested_${attestationData.eVerifyNo}.pdf`;
+      const attestedBlob = await generateAttestationPdf(
         elementIds,
-        `Oman_Attested_${attestationData.eVerifyNo}.pdf`
+        attestedFileName
       );
+
+      const attestedPdfFile = new File(
+        [attestedBlob],
+        attestedFileName,
+        { type: "application/pdf" }
+      );
+
+      // 2. Post both original upload and attested PDF to backend
+      if (formData) {
+        const payload: IPdf = {
+          applicantName: formData.applicantName,
+          applyingFrom: formData.applyingFrom,
+          approverName: formData.approverName,
+          branch: formData.branch,
+          dateOfAttestation: formData.dateOfAttestation,
+          eVerifyNo: formData.eVerifyNo,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          taxRegistrationNumber: formData.taxRegistrationNumber || "",
+          verifyAt: formData.verifyAt,
+          verifyBy: formData.verifyBy,
+          documentName: formData.documentName || selectedRequest?.name || "Attestation Document",
+          transactionDate: formData.transactionDate,
+          totalPayment: formData.totalPayment,
+          paymentId: formData.paymentId,
+          originalPdf: formData.originalPdf, // User's uploaded original file
+          documents: attestedPdfFile, // Generated official attested PDF file
+        };
+
+        console.log("=== SUBMITTING PDF TO BACKEND ===");
+        console.log("Payload:", payload);
+        await submitPdf(payload);
+        toast.success("Document created & saved to database successfully!");
+      }
+
       setDownloadSuccess(true);
+      toast.success("Attested PDF downloaded successfully!");
       setTimeout(() => setDownloadSuccess(false), 4500);
-    } catch (err) {
-      console.error("PDF generation failed:", err);
-      alert("Failed to generate PDF. Please try again.");
+    } catch (err: any) {
+      console.error("PDF generation or backend submit error:", err);
+      toast.error(err?.message || "Failed to process PDF. Please try again.");
     } finally {
       setIsGeneratingPdf(false);
     }

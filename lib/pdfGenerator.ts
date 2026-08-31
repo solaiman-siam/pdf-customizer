@@ -123,6 +123,9 @@ export async function generateAttestationPdf(
     throw new Error("Could not find any printable elements to generate PDF.");
   }
 
-  // Save the generated PDF
+  // Save the generated PDF to user's computer
   pdf.save(fileName);
+
+  // Return the PDF Blob so it can be sent to the backend
+  return pdf.output("blob");
 }
