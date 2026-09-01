@@ -6,6 +6,7 @@ import Image from "next/image";
 import { images } from "@/lib/imageProvider";
 import { useQuery } from "@tanstack/react-query";
 import { getPdfDetails } from "@/app/services/pdfApi";
+import { TailSpin } from "react-loader-spinner";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -13,7 +14,6 @@ interface PageProps {
 
 export default function DetailsPage({ params }: PageProps) {
   const resolvedParams = use(params);
-
 
   const eVerifyNo = resolvedParams?.id;
 
@@ -29,13 +29,32 @@ export default function DetailsPage({ params }: PageProps) {
 
   const record = pdfInfo?.data ?? {};
 
-  const openPdfInNewTab = (bufferObj: { type: string; data: number[] } | undefined) => {
+  const openPdfInNewTab = (
+    bufferObj: { type: string; data: number[] } | undefined,
+  ) => {
     if (!bufferObj?.data) return;
     const bytes = new Uint8Array(bufferObj.data);
     const blob = new Blob([bytes], { type: "application/pdf" });
     const url = URL.createObjectURL(blob);
     window.open(url, "_blank");
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full bg-white flex items-center justify-center">
+        <TailSpin
+          visible={true}
+          height="100"
+          width="100"
+          color="#313131"
+          ariaLabel="tail-spin-loading"
+          radius="2"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -279,4 +298,3 @@ export default function DetailsPage({ params }: PageProps) {
     </div>
   );
 }
-

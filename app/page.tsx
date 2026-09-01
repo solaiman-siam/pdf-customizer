@@ -253,7 +253,7 @@ export default function Home() {
   // While checking auth on initial render
   if (isAuthenticated === null) {
     return (
-      <div className="min-h-screen w-full bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen w-full bg-white flex items-center justify-center">
         <div className="h-8 w-8 rounded-full border-2 border-teal-500 border-t-transparent animate-spin"></div>
       </div>
     );

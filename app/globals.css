@@ -13,12 +13,7 @@
   --font-carlito: var(--font-carlito);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Dark mode disabled — always use white background */
 
 body {
   background: var(--background);

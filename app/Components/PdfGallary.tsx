@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { getPdfList } from "../services/pdfApi";
+import { TailSpin } from "react-loader-spinner";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -74,7 +75,7 @@ const mockRecords: PdfRecord[] = [
 export default function PdfGallary() {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
-  const { data: pdfList = {} } = useQuery({
+  const { data: pdfList = {}, isLoading } = useQuery({
     queryKey: ["pdf-lists"],
     queryFn: () => getPdfList(),
   });
@@ -82,6 +83,23 @@ export default function PdfGallary() {
   // console.log(pdfList)
 
   const records: any[] = pdfList?.data || [];
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-full bg-white flex items-center justify-center">
+        <TailSpin
+          visible={true}
+          height="80"
+          width="80"
+          color="#d1d1d1"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
+    );
+  }
 
   function handleDownload(record: any) {
     const recordId = record?._id || record?.eVerifyNo || record?.id;
@@ -136,30 +154,25 @@ export default function PdfGallary() {
   }
 
   return (
-    <div className="relative min-h-screen w-full bg-slate-950 text-white font-sans overflow-x-hidden">
-      {/* ── Background Glow ── */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-teal-500/8 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-[400px] w-[600px] rounded-full bg-indigo-600/6 blur-3xl" />
-      </div>
+    <div className="relative min-h-screen w-full bg-gray-50 text-gray-900 font-sans overflow-x-hidden">
 
       {/* ── Header ── */}
-      <header className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-8 py-5 flex items-center justify-between border-b border-white/8">
+      <header className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-8 py-5 flex items-center justify-between border-b border-gray-200 bg-white shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-500/20 border border-teal-500/30">
-            <svg className="h-5 w-5 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 border border-teal-200">
+            <svg className="h-5 w-5 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
           <div>
-            <p className="text-[10px] font-bold tracking-widest text-teal-400 uppercase">Foreign Ministry</p>
-            <h1 className="text-base font-black tracking-tight leading-tight">PDF Gallery</h1>
+            <p className="text-[10px] font-bold tracking-widest text-teal-600 uppercase">Foreign Ministry</p>
+            <h1 className="text-base font-black tracking-tight leading-tight text-gray-900">PDF Gallery</h1>
           </div>
         </div>
 
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 backdrop-blur-md transition hover:bg-white/10 hover:text-white"
+          className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-xs font-semibold text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
         >
           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -174,51 +187,51 @@ export default function PdfGallary() {
         {/* ── Page Title + Stats Row ── */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight">Download History</h2>
-            <p className="mt-1 text-sm text-slate-400">All your attested &amp; legalized documents in one place.</p>
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-gray-900">Download History</h2>
+            <p className="mt-1 text-sm text-gray-500">All your attested &amp; legalized documents in one place.</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="rounded-xl border border-white/8 bg-white/4 px-4 py-2.5 text-center backdrop-blur-md">
-              <p className="text-xl font-black text-teal-400">{records.length}</p>
-              <p className="text-[10px] text-slate-400 font-medium mt-0.5">Total</p>
+            <div className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-center shadow-sm">
+              <p className="text-xl font-black text-teal-600">{records.length}</p>
+              <p className="text-[10px] text-gray-400 font-medium mt-0.5">Total</p>
             </div>
-            <div className="rounded-xl border border-white/8 bg-white/4 px-4 py-2.5 text-center backdrop-blur-md">
-              <p className="text-xl font-black text-slate-300">{records.length}</p>
-              <p className="text-[10px] text-slate-400 font-medium mt-0.5">Showing</p>
+            <div className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-center shadow-sm">
+              <p className="text-xl font-black text-gray-700">{records.length}</p>
+              <p className="text-[10px] text-gray-400 font-medium mt-0.5">Showing</p>
             </div>
           </div>
         </div>
 
         {/* ── Table Card ── */}
-        <div className="rounded-2xl border border-white/8 bg-white/3 backdrop-blur-xl overflow-hidden shadow-2xl shadow-black/40">
+        <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/8 bg-white/4">
-                  <th className="px-5 py-4 text-left text-[11px] font-bold tracking-widest text-slate-400 uppercase">
+                <tr className="border-b border-gray-200 bg-gray-50">
+                  <th className="px-5 py-4 text-left text-[11px] font-bold tracking-widest text-gray-500 uppercase">
                     Reference ID
                   </th>
-                  <th className="px-5 py-4 text-left text-[11px] font-bold tracking-widest text-slate-400 uppercase">
+                  <th className="px-5 py-4 text-left text-[11px] font-bold tracking-widest text-gray-500 uppercase">
                     Generated On
                   </th>
-                  <th className="px-5 py-4 text-left text-[11px] font-bold tracking-widest text-slate-400 uppercase">
+                  <th className="px-5 py-4 text-left text-[11px] font-bold tracking-widest text-gray-500 uppercase">
                     Document Name
                   </th>
-                  <th className="px-5 py-4 text-left text-[11px] font-bold tracking-widest text-slate-400 uppercase">
+                  <th className="px-5 py-4 text-left text-[11px] font-bold tracking-widest text-gray-500 uppercase">
                     Verifier/Issuing Authority
                   </th>
-                  <th className="px-5 py-4 text-right text-[11px] font-bold tracking-widest text-slate-400 uppercase">
+                  <th className="px-5 py-4 text-right text-[11px] font-bold tracking-widest text-gray-500 uppercase">
                     Action
                   </th>
                 </tr>
               </thead>
 
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-gray-100">
                 {records.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="py-20 text-center text-slate-500 text-sm">
+                    <td colSpan={5} className="py-20 text-center text-gray-400 text-sm">
                       <div className="flex flex-col items-center gap-3">
-                        <svg className="h-10 w-10 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="h-10 w-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                         No records found.
@@ -233,16 +246,16 @@ export default function PdfGallary() {
                     return (
                       <tr
                         key={recordId}
-                        className="group transition-colors hover:bg-teal-500/5"
+                        className="group transition-colors hover:bg-teal-50"
                         style={{ animationDelay: `${idx * 40}ms` }}
                       >
                         {/* Reference ID */}
-                        <td className="px-5 py-4 font-mono text-xs text-teal-400 font-semibold whitespace-nowrap">
+                        <td className="px-5 py-4 font-mono text-xs text-teal-600 font-semibold whitespace-nowrap">
                           {record.eVerifyNo || record.id || "—"}
                         </td>
 
                         {/* Generated Date */}
-                        <td className="px-5 py-4 whitespace-nowrap text-slate-400 text-xs font-medium">
+                        <td className="px-5 py-4 whitespace-nowrap text-gray-500 text-xs font-medium">
                           {record.createdAt
                             ? new Date(record.createdAt).toLocaleDateString("en-GB", {
                                 day: "2-digit",
@@ -255,12 +268,12 @@ export default function PdfGallary() {
                         {/* Document Name */}
                         <td className="px-5 py-4 max-w-55">
                           <div className="flex items-center gap-2.5">
-                            <div className="shrink-0 h-8 w-8 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center">
-                              <svg className="h-4 w-4 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                            <div className="shrink-0 h-8 w-8 rounded-lg bg-teal-50 border border-teal-200 flex items-center justify-center">
+                              <svg className="h-4 w-4 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                               </svg>
                             </div>
-                            <span className="text-sm font-semibold text-white truncate">
+                            <span className="text-sm font-semibold text-gray-800 truncate">
                               {record.documentName || "Attestation Document"}
                             </span>
                           </div>
@@ -268,7 +281,7 @@ export default function PdfGallary() {
 
                         {/* Verifier */}
                         <td className="px-5 py-4 max-w-55">
-                          <span className="text-sm font-semibold text-white truncate">
+                          <span className="text-sm font-semibold text-gray-700 truncate">
                             {"Foreign Ministry - Oman"}
                           </span>
                         </td>
@@ -320,11 +333,11 @@ export default function PdfGallary() {
           </div>
 
           {/* ── Table Footer ── */}
-          <div className="flex items-center justify-between border-t border-white/8 px-5 py-3.5 bg-white/2">
-            <p className="text-xs text-slate-500">
-              Showing <span className="text-slate-300 font-semibold">{records.length}</span> records
+          <div className="flex items-center justify-between border-t border-gray-200 px-5 py-3.5 bg-gray-50">
+            <p className="text-xs text-gray-500">
+              Showing <span className="text-gray-800 font-semibold">{records.length}</span> records
             </p>
-            <p className="text-xs text-slate-600">
+            <p className="text-xs text-gray-400">
               Foreign Ministry · Document Attestation System 2026
             </p>
           </div>
