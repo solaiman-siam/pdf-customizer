@@ -49,3 +49,9 @@ export const submitPdf = async (pdfData: IPdf | FormData) => {
   const data = await response.json();
   return data;
 };
+
+export const getPdfDetails = async (eVerifyNo: string) => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/pdf-list/${eVerifyNo}`)
+  const data = await response.json()
+  return data
+}

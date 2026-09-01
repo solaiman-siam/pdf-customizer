@@ -74,38 +74,37 @@ export function AttestationCard({
       >
         {/* Top Gold / Ochre Banner */}
         <div
-          className="mx-auto -mt-4 pt-0 pb-1 px-3 text-center shadow-sm"
-          style={{
-            width: "82%",
-            maxWidth: "320px",
-            backgroundColor: "#c2a76e",
-            color: "#ffffff",
-            borderRadius: "0 0 2px 2px",
-          }}
-        >
-          <p
-            className="text-[9px] font-bold leading-tight tracking-normal"
-            dir="rtl"
-            style={{
-              fontFamily:
-                "'Traditional Arabic', 'Segoe UI', Tahoma, sans-serif",
-              color: "#ffffff",
-            }}
-          >
-            نصادق على صحة توقيع المسؤول والختم
-          </p>
-          <p
-            className="text-[8.5px] font-medium leading-tight pb-1 mt-0 "
-            dir="rtl"
-            style={{
-              fontFamily:
-                "'Traditional Arabic', 'Segoe UI', Tahoma, sans-serif",
-              color: "#ffffff",
-            }}
-          >
-            دون تحمل الوزارة أية مسؤولية فيما يختص بمحتويات الوثيقة
-          </p>
-        </div>
+  className="mx-auto -mt-4 pt-0 pb-1 px-3 text-center shadow-sm"
+  style={{
+    width: "82%",
+    maxWidth: "320px",
+    backgroundColor: "#c2a76e",
+    color: "#f4e9c8",
+    borderRadius: "0 0 2px 2px",
+  }}
+>
+  <p
+    className="text-[8px] font-semibold leading-tight tracking-normal mb-0"
+    dir="rtl"
+    style={{
+      fontFamily: "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
+      color: "#f4e9c8",
+    }}
+  >
+    نصادق على صحة توقيع المسؤول والختم
+  </p>
+
+  <p
+    className="text-[7.5px] font-semibold leading-tight mt-0 pb-1"
+    dir="rtl"
+    style={{
+      fontFamily: "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
+      color: "#f4e9c8",
+    }}
+  >
+    دون تحمل الوزارة أية مسؤولية فيما يخص بمحتويات الوثيقة
+  </p>
+</div>
 
         {/* Main Card Row: Seal + Table */}
         <div className="-mt-0.5 flex relative items-center gap-3">
@@ -299,9 +298,11 @@ export default function AttestationCertificate({
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
 
   useEffect(() => {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_QRCODE_URL ?? window.location.origin;
     const qrContent = data.eVerifyNo
-      ? `https://verify.fm.gov.om/attestation?id=${encodeURIComponent(data.eVerifyNo)}`
-      : "https://verify.fm.gov.om/attestation";
+      ? `${baseUrl}/pdf/${data.eVerifyNo}`
+      : baseUrl;
 
     QRCode.toDataURL(qrContent, {
       width: 300,
@@ -388,22 +389,24 @@ export default function AttestationCertificate({
             >
               تصديق بالرقم :{" "}
               <span
-                className="font-mono font-extrabold"
-                style={{ fontSize: "13.5px", color: "#000000" }}
+                className=" font-normal "
+                style={{ fontSize: "13.5px", color: "#000000", fontFamily: '"Times New Roman", Times, serif',
+    fontWeight: 700, }}
               >
                 {data.eVerifyNo}
               </span>
             </p>
             <p
               className="mt-0.5 font-bold leading-normal"
-              style={{ fontSize: "11.5px", color: "#000000" }}
+              style={{ fontSize: "12px", color: "#000000" }}
             >
               تم إنجاز المعاملة إلكترونيا و للتأكد من صحة المعاملة يمكنك مسح
               الباركود{" "}
               <span
                 className="font-bold"
                 dir="ltr"
-                style={{ color: "#000000" }}
+                style={{ color: "#000000", fontFamily: '"Times New Roman", Times, serif',
+    fontWeight: 700, }}
               >
                 (QR Code)
               </span>
@@ -411,7 +414,7 @@ export default function AttestationCertificate({
           </div>
 
           {/* QR Code */}
-          <div className="flex-shrink-0 -mt-1 flex items-center justify-center bg-white">
+          <div className="shrink-0 -mt-1 flex items-center justify-center bg-white">
             {qrCodeUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img

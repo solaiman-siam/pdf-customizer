@@ -79,6 +79,8 @@ export default function PdfGallary() {
     queryFn: () => getPdfList(),
   });
 
+  console.log(pdfList)
+
   const records: any[] = pdfList?.data || [];
 
   function handleDownload(record: any) {
@@ -275,7 +277,7 @@ export default function PdfGallary() {
                         <td className="px-5 py-4 text-right whitespace-nowrap">
                           <div className="inline-flex items-center gap-2">
                             <Link
-                              href={`/pdf/${record.eVerifyNo || record._id || record.id}`}
+                              href={`/pdf/${record.eVerifyNo}`}
                               className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-teal-400 bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 transition-all duration-150"
                             >
                               View

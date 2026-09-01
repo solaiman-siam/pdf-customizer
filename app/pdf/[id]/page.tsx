@@ -3,6 +3,8 @@
 import React, { use } from "react";
 import Image from "next/image";
 import { images } from "@/lib/imageProvider";
+import { useQuery } from "@tanstack/react-query";
+import { getPdfDetails } from "@/app/services/pdfApi";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -10,20 +12,28 @@ interface PageProps {
 
 export default function DetailsPage({ params }: PageProps) {
   const resolvedParams = use(params);
-  const docId = resolvedParams?.id || "ATT-2026-00124";
 
-  const data = {
-    transactionNumber: "VN00662423",
-    paymentId: "202623821432105",
-    totalPayment: "OMR 20.50",
-    transactionDate: "26 Aug 2026",
-    documentType: "Civil Document- ID Card Driving license birth certificate passport",
-    applicantName: "MD JIHAD UDDIN",
-    emailId: "ok11146310@gmail.com",
-    phoneNumber: "91616610",
-    verifierName: "Foreign Ministry - Oman",
-    verificationStatus: "Approved",
-    verificationDateTime: "2026-08-26 12:13:35",
+
+  const eVerifyNo = resolvedParams?.id;
+
+  console.log("eVerifyNo:", eVerifyNo)
+  console.log(resolvedParams)
+
+  const { data: pdfInfo, isLoading } = useQuery({
+    queryKey: ["pdf-details", eVerifyNo],
+    queryFn: () => getPdfDetails(eVerifyNo),
+  });
+
+  console.log("pdfInfo:", pdfInfo);
+
+  const record = pdfInfo?.data ?? {};
+
+  const openPdfInNewTab = (bufferObj: { type: string; data: number[] } | undefined) => {
+    if (!bufferObj?.data) return;
+    const bytes = new Uint8Array(bufferObj.data);
+    const blob = new Blob([bytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
   };
 
   return (
@@ -35,10 +45,10 @@ export default function DetailsPage({ params }: PageProps) {
       }}
     >
       {/* ── Outer Wrapper with Outside Vertical Text ── */}
-      <div className="relative border bg-white p-18 border-black-500 w-full max-w-[1100px]">
+      <div className="relative border bg-white sm:p-18 border-black-500 w-full max-w-[1100px]">
         {/* Vertical text OUTSIDE the black box on the left */}
         <div
-          className="absolute left-10 top-1/2 -translate-y-1/2 text-[#49afcd] text-[9.5px] sm:text-[19.5px] font-normal tracking-wide select-none pointer-events-none whitespace-nowrap"
+          className="absolute -left-5 sm:left-10 top-1/2 -translate-y-1/2 text-[#49afcd] text-[9.5px] sm:text-[19.5px] font-normal tracking-wide select-none pointer-events-none whitespace-nowrap"
           style={{
             writingMode: "vertical-rl",
             transform: "rotate(180deg)",
@@ -111,7 +121,7 @@ export default function DetailsPage({ params }: PageProps) {
                       Transaction Number
                     </td>
                     <td className="px-1  py-1 text-[#1b6394] font-black break-words leading-tight">
-                      {data.transactionNumber}
+                      {record.eVerifyNo ?? "—"}
                     </td>
                   </tr>
                   <tr className="border-b border-[#94a3b8]">
@@ -119,7 +129,7 @@ export default function DetailsPage({ params }: PageProps) {
                       Payment ID
                     </td>
                     <td className="px-1  py-1 text-[#1b6394] font-black break-words leading-tight">
-                      {data.paymentId}
+                      {record.paymentId ?? "—"}
                     </td>
                   </tr>
                   <tr className="border-b border-[#94a3b8]">
@@ -127,7 +137,7 @@ export default function DetailsPage({ params }: PageProps) {
                       Total Payment
                     </td>
                     <td className="px-1  py-1 text-[#1b6394] font-black break-words leading-tight">
-                      {data.totalPayment}
+                      {record.totalPayment ?? "—"}
                     </td>
                   </tr>
                   <tr>
@@ -135,7 +145,7 @@ export default function DetailsPage({ params }: PageProps) {
                       Transaction Date
                     </td>
                     <td className="px-1  py-1 text-[#1b6394] font-black break-words leading-tight">
-                      {data.transactionDate}
+                      {record.transactionDate ?? "—"}
                     </td>
                   </tr>
                 </tbody>
@@ -156,7 +166,7 @@ export default function DetailsPage({ params }: PageProps) {
                       Document Type
                     </td>
                     <td className="px-1  py-1 text-[#1b6394] font-black break-words leading-tight">
-                      {data.documentType}
+                      {record.documentName ?? "—"}
                     </td>
                   </tr>
                   <tr className="border-b border-[#94a3b8]">
@@ -164,7 +174,7 @@ export default function DetailsPage({ params }: PageProps) {
                       Applicant Name
                     </td>
                     <td className="px-1  py-1 text-[#1b6394] font-black break-words leading-tight">
-                      {data.applicantName}
+                      {record.applicantName ?? "—"}
                     </td>
                   </tr>
                   <tr className="border-b border-[#94a3b8]">
@@ -172,7 +182,7 @@ export default function DetailsPage({ params }: PageProps) {
                       Email Id
                     </td>
                     <td className="px-1  py-1 text-[#1b6394] font-black break-words leading-tight">
-                      {data.emailId}
+                      {record.email ?? "—"}
                     </td>
                   </tr>
                   <tr>
@@ -180,7 +190,7 @@ export default function DetailsPage({ params }: PageProps) {
                       Phone Number
                     </td>
                     <td className="px-1  py-1 text-[#1b6394] font-black break-words leading-tight">
-                      {data.phoneNumber}
+                      {record.phoneNumber ?? "—"}
                     </td>
                   </tr>
                 </tbody>
@@ -201,7 +211,7 @@ export default function DetailsPage({ params }: PageProps) {
                       Verifier Name
                     </td>
                     <td className="px-1  py-1 text-[#1b6394] font-black break-words leading-tight">
-                      {data.verifierName}
+                      {record.verifyBy ?? "—"}
                     </td>
                   </tr>
                   <tr className="border-b border-[#94a3b8]">
@@ -209,7 +219,7 @@ export default function DetailsPage({ params }: PageProps) {
                       Verification Status
                     </td>
                     <td className="px-1  py-1 text-[#1b6394] font-black break-words leading-tight">
-                      {data.verificationStatus}
+                      {record.approverName ?? "—"}
                     </td>
                   </tr>
                   <tr>
@@ -217,7 +227,7 @@ export default function DetailsPage({ params }: PageProps) {
                       Verification Date & Time
                     </td>
                     <td className="px-1  py-1 text-[#1b6394] font-black break-words leading-tight">
-                      {data.verificationDateTime}
+                      {record.verifyAt ?? "—"}
                     </td>
                   </tr>
                 </tbody>
@@ -238,12 +248,12 @@ export default function DetailsPage({ params }: PageProps) {
                       Original Document
                     </td>
                     <td className="px-1  py-1 break-words leading-tight">
-                      <a
-                        href="#"
-                        className="text-[#1b6394] font-bold italic hover:underline cursor-pointer"
+                      <button
+                        onClick={() => openPdfInNewTab(record.originalPdf)}
+                        className="text-[#1b6394] font-bold italic hover:underline cursor-pointer bg-transparent border-none p-0"
                       >
                         View Document
-                      </a>
+                      </button>
                     </td>
                   </tr>
                   <tr>
@@ -251,12 +261,12 @@ export default function DetailsPage({ params }: PageProps) {
                       Attested Document
                     </td>
                     <td className="px-1  py-1 break-words leading-tight">
-                      <a
-                        href="#"
-                        className="text-[#1b6394] font-bold italic hover:underline cursor-pointer"
+                      <button
+                        onClick={() => openPdfInNewTab(record.documents)}
+                        className="text-[#1b6394] font-bold italic hover:underline cursor-pointer bg-transparent border-none p-0"
                       >
                         View Document
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 </tbody>
