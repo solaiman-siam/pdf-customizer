@@ -1,7 +1,7 @@
 import { IPdf } from "../types/pdfType";
 
 export const getPdfList = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/pdf-list`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/pdf/pdf-list`);
   const data = await response.json();
   return data;
 };
@@ -36,7 +36,7 @@ export const submitPdf = async (pdfData: IPdf | FormData) => {
     });
   }
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/create-pdf`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/pdf/create-pdf`, {
     method: "POST",
     body,
   });
@@ -51,7 +51,7 @@ export const submitPdf = async (pdfData: IPdf | FormData) => {
 };
 
 export const getPdfDetails = async (eVerifyNo: string) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/pdf-list/${eVerifyNo}`)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/pdf/pdf-list/${eVerifyNo}`)
   const data = await response.json()
   return data
 }
