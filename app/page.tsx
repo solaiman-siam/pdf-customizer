@@ -207,8 +207,8 @@ export default function Home() {
           documents: attestedPdfFile, // Generated official attested PDF file
         };
 
-        console.log("=== SUBMITTING PDF TO BACKEND ===");
-        console.log("Payload:", payload);
+        // console.log("=== SUBMITTING PDF TO BACKEND ===");
+        // console.log("Payload:", payload);
         await submitPdf(payload);
         toast.success("Document created & saved to database successfully!");
       }

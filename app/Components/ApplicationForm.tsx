@@ -83,11 +83,11 @@ export default function ApplicationForm({
     mutationFn: (data: IPdf) => submitPdf(data),
     onSuccess: (data) => {
       toast.success("Pdf created successfully");
-      console.log("Mutation Success Response:", data);
+      // console.log("Mutation Success Response:", data);
     },
     onError: (err) => {
       toast.error("Failed to create pdf");
-      console.error("Mutation Error:", err);
+      // console.error("Mutation Error:", err);
     },
   });
 
@@ -102,10 +102,10 @@ export default function ApplicationForm({
       originalPdf: data.originalPdf,
     };
 
-    console.log("=== FORM SUBMISSION ALL DATA ===");
-    console.log(fullPayload);
-    console.log("Original PDF File:", fullPayload.originalPdf ? Array.from(fullPayload.originalPdf).map(f => f.name) : "None");
-    console.log("================================");
+    // console.log("=== FORM SUBMISSION ALL DATA ===");
+    // console.log(fullPayload);
+    // console.log("Original PDF File:", fullPayload.originalPdf ? Array.from(fullPayload.originalPdf).map(f => f.name) : "None");
+    // console.log("================================");
 
     onSubmit(data);
   };

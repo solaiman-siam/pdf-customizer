@@ -16,15 +16,15 @@ export default function DetailsPage({ params }: PageProps) {
 
   const eVerifyNo = resolvedParams?.id;
 
-  console.log("eVerifyNo:", eVerifyNo)
-  console.log(resolvedParams)
+  // console.log("eVerifyNo:", eVerifyNo)
+  // console.log(resolvedParams)
 
   const { data: pdfInfo, isLoading } = useQuery({
     queryKey: ["pdf-details", eVerifyNo],
     queryFn: () => getPdfDetails(eVerifyNo),
   });
 
-  console.log("pdfInfo:", pdfInfo);
+  // console.log("pdfInfo:", pdfInfo);
 
   const record = pdfInfo?.data ?? {};
 

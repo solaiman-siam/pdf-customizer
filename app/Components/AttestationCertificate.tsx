@@ -26,14 +26,14 @@ export function OmanSeal({ className = "" }: { className?: string }) {
   return (
     <div
       className={`flex flex-col items-center  justify-center text-center ${carlito.className} ${className}`}
-      style={{ width: "95px" }}
+      style={{ width: "100px" }}
     >
       <Image
         src={images.OmanLogo}
         alt="Oman Seal"
-        width={70}
-        height={70}
-        className=" -ml-0"
+        width={200}
+        height={200}
+        className=" -ml-0 w-full h-full "
         style={{ width: "auto", height: "auto" }}
       />
     </div>
@@ -74,37 +74,39 @@ export function AttestationCard({
       >
         {/* Top Gold / Ochre Banner */}
         <div
-  className="mx-auto -mt-4 pt-0 pb-1 px-3 text-center shadow-sm"
-  style={{
-    width: "82%",
-    maxWidth: "320px",
-    backgroundColor: "#c2a76e",
-    color: "#f4e9c8",
-    borderRadius: "0 0 2px 2px",
-  }}
->
-  <p
-    className="text-[8px] font-semibold leading-tight tracking-normal mb-0"
-    dir="rtl"
-    style={{
-      fontFamily: "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
-      color: "#f4e9c8",
-    }}
-  >
-    نصادق على صحة توقيع المسؤول والختم
-  </p>
+          className="mx-auto pt-0 pb-2 px-3 flex flex-col justify-center items-center -mt-4 text-center shadow-sm"
+          style={{
+            width: "82%",
+            maxWidth: "320px",
+            backgroundColor: "#c2a76e",
+            color: "#f4e9c8",
+            borderRadius: "0 0 2px 2px",
+          }}
+        >
+          <p
+            className="text-[9px] pt-0 font-semibold  leading-tight tracking-normal"
+            dir="rtl"
+            style={{
+              fontFamily:
+                "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
+              color: "#f4e9c8",
+            }}
+          >
+            نصادق على صحة توقيع المسؤول والختم
+          </p>
 
-  <p
-    className="text-[7.5px] font-semibold leading-tight mt-0 pb-1"
-    dir="rtl"
-    style={{
-      fontFamily: "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
-      color: "#f4e9c8",
-    }}
-  >
-    دون تحمل الوزارة أية مسؤولية فيما يخص بمحتويات الوثيقة
-  </p>
-</div>
+          <p
+            className="text-[8.5px] font-semibold leading-tight "
+            dir="rtl"
+            style={{
+              fontFamily:
+                "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
+              color: "#f4e9c8",
+            }}
+          >
+            دون تحمل الوزارة أية مسؤولية فيما يخص بمحتويات الوثيقة
+          </p>
+        </div>
 
         {/* Main Card Row: Seal + Table */}
         <div className="-mt-0.5 flex relative items-center gap-3">
@@ -348,7 +350,7 @@ export default function AttestationCertificate({
         >
           <span style={{ color: "#64748b" }}>Blockchain Verified</span>
           <svg
-          className="-mb-4"
+            className="-mb-4"
             width="20"
             height="20"
             viewBox="0 0 80 80"
@@ -381,7 +383,7 @@ export default function AttestationCertificate({
         </div>
 
         {/* Right Section: Arabic Notice & QR Code */}
-        <div className="flex relative z-50 -mt-4 mr-0 items-center gap-3">
+        <div className="flex relative z-50 -mt-3 mr-0 items-center gap-3">
           <div className="text-right" dir="rtl">
             <p
               className="font-bold tracking-wide"
@@ -390,8 +392,12 @@ export default function AttestationCertificate({
               تصديق بالرقم :{" "}
               <span
                 className=" font-normal "
-                style={{ fontSize: "13.5px", color: "#000000", fontFamily: '"Times New Roman", Times, serif',
-    fontWeight: 700, }}
+                style={{
+                  fontSize: "13.5px",
+                  color: "#000000",
+                  fontFamily: '"Times New Roman", Times, serif',
+                  fontWeight: 700,
+                }}
               >
                 {data.eVerifyNo}
               </span>
@@ -405,8 +411,11 @@ export default function AttestationCertificate({
               <span
                 className="font-bold"
                 dir="ltr"
-                style={{ color: "#000000", fontFamily: '"Times New Roman", Times, serif',
-    fontWeight: 700, }}
+                style={{
+                  color: "#000000",
+                  fontFamily: '"Times New Roman", Times, serif',
+                  fontWeight: 700,
+                }}
               >
                 (QR Code)
               </span>

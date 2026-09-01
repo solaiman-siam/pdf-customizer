@@ -79,7 +79,7 @@ export default function PdfGallary() {
     queryFn: () => getPdfList(),
   });
 
-  console.log(pdfList)
+  // console.log(pdfList)
 
   const records: any[] = pdfList?.data || [];
 
