@@ -91,7 +91,7 @@ export default function PdfGallary() {
           visible={true}
           height="80"
           width="80"
-          color="#d1d1d1"
+          color="#313131"
           ariaLabel="tail-spin-loading"
           radius="1"
           wrapperStyle={{}}
