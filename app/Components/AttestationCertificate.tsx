@@ -31,8 +31,8 @@ export function OmanSeal({ className = "" }: { className?: string }) {
       <Image
         src={images.OmanLogo}
         alt="Oman Seal"
-        width={200}
-        height={200}
+        width={400}
+        height={400}
         className=" -ml-0 w-full h-full "
         style={{ width: "auto", height: "auto" }}
       />
@@ -55,9 +55,9 @@ export function AttestationCard({
 }: AttestationCardProps) {
   return (
     <div
-      className={`relative  ${carlito.className} ${className} pr-8`}
+      className={`relative  ${carlito.className} ${className} pr-3`}
       style={{
-        width: "380px",
+        width: "330px",
         backgroundColor: "#ffffff",
         color: "#0f172a",
         fontFamily:
@@ -66,15 +66,16 @@ export function AttestationCard({
     >
       {/* Outer Border Box */}
       <div
-        className="relative -mt-14 pb-8 px-2.5"
+        className="relative -mt-14  pb-8 px-2.5"
         style={{
           border: "1.5px solid #8ca3b3",
           borderRadius: "1px",
         }}
       >
         {/* Top Gold / Ochre Banner */}
-        <div
-          className="mx-auto pt-0 pb-2 px-3 flex flex-col justify-center items-center -mt-4 text-center shadow-sm"
+     <div className="-mt-4">
+         <div
+          className="mx-auto pb-2 pt-0  flex flex-col justify-center z-500 px-3 items-center text-center shadow-sm"
           style={{
             width: "82%",
             maxWidth: "320px",
@@ -84,7 +85,7 @@ export function AttestationCard({
           }}
         >
           <p
-            className="text-[9px] pt-0 font-semibold  leading-tight tracking-normal"
+            className="text-[9px] p-0  font-semibold -mb-0.5 tracking-tight"
             dir="rtl"
             style={{
               fontFamily:
@@ -96,7 +97,7 @@ export function AttestationCard({
           </p>
 
           <p
-            className="text-[8.5px] font-semibold leading-tight "
+            className="text-[8.5px] pt-0  font-semibold  "
             dir="rtl"
             style={{
               fontFamily:
@@ -107,6 +108,7 @@ export function AttestationCard({
             دون تحمل الوزارة أية مسؤولية فيما يخص بمحتويات الوثيقة
           </p>
         </div>
+     </div>
 
         {/* Main Card Row: Seal + Table */}
         <div className="-mt-0.5 flex relative items-center gap-3">
@@ -119,10 +121,10 @@ export function AttestationCard({
           </div>
 
           {/* Center/Right Table */}
-          <div className="flex-1 pl-11 pr-1">
+          <div className="flex-1 -mt-1 pl-11 pr-1">
             <table
               className="w-full border-collapse"
-              style={{ fontSize: "9.5px" }}
+              style={{ fontSize: "9px" }}
             >
               <tbody>
                 <tr>
@@ -311,7 +313,7 @@ export default function AttestationCertificate({
       margin: 1,
       errorCorrectionLevel: "M",
       color: {
-        dark: "#000000",
+        dark: "#363636",
         light: "#ffffff",
       },
     })
@@ -386,7 +388,7 @@ export default function AttestationCertificate({
         <div className="flex relative z-50 -mt-3 mr-0 items-center gap-3">
           <div className="text-right" dir="rtl">
             <p
-              className="font-bold tracking-wide"
+              className="font-semibold tracking-wide"
               style={{ fontSize: "13px", color: "#000000" }}
             >
               تصديق بالرقم :{" "}
@@ -403,7 +405,7 @@ export default function AttestationCertificate({
               </span>
             </p>
             <p
-              className="mt-0.5 font-bold leading-normal"
+              className="mt-0.5 font-semibold leading-normal"
               style={{ fontSize: "12px", color: "#000000" }}
             >
               تم إنجاز المعاملة إلكترونيا و للتأكد من صحة المعاملة يمكنك مسح
@@ -423,7 +425,7 @@ export default function AttestationCertificate({
           </div>
 
           {/* QR Code */}
-          <div className="shrink-0 -mt-1 flex items-center justify-center bg-white">
+          <div className="shrink-0 -mt-2 -mr-3 flex items-center justify-center">
             {qrCodeUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -431,10 +433,10 @@ export default function AttestationCertificate({
                 alt="Verification QR Code"
                 style={{
                   width: "75px",
-                  border: "5px solid #ffffff28",
-
+                  border: "4px solid white",
                   height: "75px",
                   objectFit: "contain",
+                  display: "block",
                 }}
               />
             ) : (
@@ -442,8 +444,8 @@ export default function AttestationCertificate({
                 style={{
                   width: "70px",
                   height: "70px",
-                  backgroundColor: "#f3f4f6",
-                  color: "#FFFF",
+                  backgroundColor: "#363636",
+                  color: "#ffffff",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
