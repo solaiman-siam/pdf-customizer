@@ -26,16 +26,15 @@ export function OmanSeal({ className = "" }: { className?: string }) {
   return (
     <div
       className={`flex flex-col items-center  justify-center text-center ${carlito.className} ${className}`}
-      style={{ width: "100px" }}
+      style={{ width: "80px" }}
     >
       <Image
-        src={images.OmanLogo}
-        alt="Oman Seal"
-        width={400}
-        height={400}
-        className=" -ml-0 w-full h-full "
-        style={{ width: "auto", height: "auto" }}
-      />
+  src={images.OmanLogo}
+  alt="Oman Seal"
+  width={150}
+  height={150}
+  className="block w-auto h-auto ml-0"
+/>
     </div>
   );
 }
@@ -57,7 +56,7 @@ export function AttestationCard({
     <div
       className={`relative  ${carlito.className} ${className} pr-3`}
       style={{
-        width: "330px",
+        width: "340px",
         backgroundColor: "#ffffff",
         color: "#0f172a",
         fontFamily:
@@ -73,45 +72,18 @@ export function AttestationCard({
         }}
       >
         {/* Top Gold / Ochre Banner */}
-     <div className="-mt-4">
-         <div
-          className="mx-auto pb-2 pt-0  flex flex-col justify-center z-500 px-3 items-center text-center shadow-sm"
-          style={{
-            width: "82%",
-            maxWidth: "320px",
-            backgroundColor: "#c2a76e",
-            color: "#f4e9c8",
-            borderRadius: "0 0 2px 2px",
-          }}
-        >
-          <p
-            className="text-[9px] p-0  font-semibold -mb-0.5 tracking-tight"
-            dir="rtl"
-            style={{
-              fontFamily:
-                "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
-              color: "#f4e9c8",
-            }}
-          >
-            نصادق على صحة توقيع المسؤول والختم
-          </p>
-
-          <p
-            className="text-[8.5px] pt-0  font-semibold  "
-            dir="rtl"
-            style={{
-              fontFamily:
-                "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
-              color: "#f4e9c8",
-            }}
-          >
-            دون تحمل الوزارة أية مسؤولية فيما يخص بمحتويات الوثيقة
-          </p>
-        </div>
+     <div className="-mt-3">
+        <Image
+  src={images.TopBanner}
+  alt="banner"
+  width={400}
+  height={200}
+  className=" max-w-67.5 mx-auto"
+/>
      </div>
 
         {/* Main Card Row: Seal + Table */}
-        <div className="-mt-0.5 flex relative items-center gap-3">
+        <div className=" flex relative items-center gap-3">
           {/* Left Seal */}
           <div
             className="shrink-0 top-1/2 -translate-y-1/2  -left-20 flex absolute justify-center pl-0.5"
@@ -121,7 +93,7 @@ export function AttestationCard({
           </div>
 
           {/* Center/Right Table */}
-          <div className="flex-1 -mt-1 pl-11 pr-1">
+          <div className="flex-1 -mt-1  pl-8 pr-1">
             <table
               className="w-full border-collapse"
               style={{ fontSize: "9px" }}
@@ -388,7 +360,7 @@ export default function AttestationCertificate({
         <div className="flex relative z-50 -mt-3 mr-0 items-center gap-3">
           <div className="text-right" dir="rtl">
             <p
-              className="font-semibold tracking-wide"
+              className="font-semibold -mb-1 tracking-wide"
               style={{ fontSize: "13px", color: "#000000" }}
             >
               تصديق بالرقم :{" "}
@@ -425,7 +397,7 @@ export default function AttestationCertificate({
           </div>
 
           {/* QR Code */}
-          <div className="shrink-0 -mt-2 -mr-3 flex items-center justify-center">
+          <div className="shrink-0 -mt-2.5 -mr-3 flex items-center justify-center">
             {qrCodeUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -433,7 +405,7 @@ export default function AttestationCertificate({
                 alt="Verification QR Code"
                 style={{
                   width: "75px",
-                  border: "4px solid white",
+                  border: "5px solid white",
                   height: "75px",
                   objectFit: "contain",
                   display: "block",
