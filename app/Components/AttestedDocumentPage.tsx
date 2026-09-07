@@ -1,8 +1,5 @@
 "use client";
-
-import React from "react";
 import AttestationCertificate, { AttestationData } from "./AttestationCertificate";
-
 interface AttestedDocumentPageProps {
   data: AttestationData;
   documentUrl?: string | null;
