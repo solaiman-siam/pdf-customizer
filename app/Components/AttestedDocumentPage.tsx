@@ -49,7 +49,7 @@ export default function AttestedDocumentPage({
             className="select-none"
             style={{
               maxWidth: "100%",
-              maxHeight: "675px",
+              maxHeight: "680px",
               width: "auto",
               height: "auto",
               objectFit: "contain",

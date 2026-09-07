@@ -26,13 +26,13 @@ export function OmanSeal({ className = "" }: { className?: string }) {
   return (
     <div
       className={`flex flex-col items-center  justify-center text-center ${carlito.className} ${className}`}
-      style={{ width: "100px" }}
+      style={{ width: "80px" }}
     >
       <Image
         src={images.OmanLogo}
         alt="Oman Seal"
-        width={400}
-        height={400}
+        width={800}
+        height={800}
         className=" -ml-0 w-full h-full "
         style={{ width: "auto", height: "auto" }}
       />
@@ -55,9 +55,9 @@ export function AttestationCard({
 }: AttestationCardProps) {
   return (
     <div
-      className={`relative  ${carlito.className} ${className} pr-3`}
+      className={`relative   ${carlito.className} ${className} pr-3`}
       style={{
-        width: "330px",
+        width: "310px",
         backgroundColor: "#ffffff",
         color: "#0f172a",
         fontFamily:
@@ -66,52 +66,57 @@ export function AttestationCard({
     >
       {/* Outer Border Box */}
       <div
-        className="relative -mt-14  pb-8 px-2.5"
+        className="relative pb-7 px-2.5"
         style={{
-          border: "1.5px solid #8ca3b3",
+          border: "1.5px solid #e2d8b4",
+          boxSizing: "border-box",
           borderRadius: "1px",
         }}
       >
         {/* Top Gold / Ochre Banner */}
-     <div className="-mt-4">
-         <div
-          className="mx-auto pb-2 pt-0  flex flex-col justify-center z-500 px-3 items-center text-center shadow-sm"
-          style={{
-            width: "82%",
-            maxWidth: "320px",
-            backgroundColor: "#c2a76e",
-            color: "#f4e9c8",
-            borderRadius: "0 0 2px 2px",
-          }}
-        >
-          <p
-            className="text-[9px] p-0  font-semibold -mb-0.5 tracking-tight"
-            dir="rtl"
+        <div className="-mt-3.5 flex justify-center w-full">
+          <div
+            className="flex flex-col items-center justify-center text-center shadow-xs"
             style={{
-              fontFamily:
-                "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
+              width: "82%",
+              maxWidth: "320px",
+              backgroundColor: "#c2a76e",
               color: "#f4e9c8",
+              borderRadius: "0 0 2px 2px",
+              padding: "1.5px 8px 2.5px 8px",
             }}
           >
-            نصادق على صحة توقيع المسؤول والختم
-          </p>
+            <span
+              dir="rtl"
+              className="block m-0 p-0 text-[8px] font-semibold text-center"
+              style={{
+                fontFamily:
+                  "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
+                color: "#f4e9c8",
+                lineHeight: "1.15",
+                marginTop: "-1.5px",
+              }}
+            >
+              نصادق على صحة توقيع المسؤول والختم
+            </span>
 
-          <p
-            className="text-[8.5px] pt-0  font-semibold  "
-            dir="rtl"
-            style={{
-              fontFamily:
-                "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
-              color: "#f4e9c8",
-            }}
-          >
-            دون تحمل الوزارة أية مسؤولية فيما يخص بمحتويات الوثيقة
-          </p>
+            <span
+              dir="rtl"
+              className="block m-0 p-0 text-[7.5px] font-semibold tracking-normal text-center"
+              style={{
+                fontFamily:
+                  "var(--font-noto-arabic), 'Noto Sans Arabic', Arial, sans-serif",
+                color: "#f4e9c8",
+                lineHeight: "1.15",
+              }}
+            >
+              دون تحمل الوزارة أية مسؤولية فيما يخص بمحتويات الوثيقة
+            </span>
+          </div>
         </div>
-     </div>
 
         {/* Main Card Row: Seal + Table */}
-        <div className="-mt-0.5 flex relative items-center gap-3">
+        <div className=" flex relative z-50 items-center gap-3">
           {/* Left Seal */}
           <div
             className="shrink-0 top-1/2 -translate-y-1/2  -left-20 flex absolute justify-center pl-0.5"
@@ -121,28 +126,28 @@ export function AttestationCard({
           </div>
 
           {/* Center/Right Table */}
-          <div className="flex-1 -mt-1 pl-11 pr-1">
+          <div className="flex-1  pl-8 pr-1">
             <table
               className="w-full border-collapse"
-              style={{ fontSize: "9px" }}
+              style={{ fontSize: "8.5px" }}
             >
               <tbody>
                 <tr>
                   <td
                     className=" text-left font-extrabold whitespace-nowrap"
-                    style={{ width: "45px", color: "#0f172a" }}
+                    style={{ width: "45px", color: "#000107" }}
                   >
                     e-Verify No
                   </td>
                   <td
                     className=" px-1.5 text-left text-nowrap font-bold"
-                    style={{ color: "#000000", width: "140px" }}
+                    style={{ color: "#000107", width: "140px" }}
                   >
                     {data.eVerifyNo}
                   </td>
                   <td
                     className=" text-left font-bold whitespace-nowrap align-top"
-                    style={{ width: "125px", color: "#0f172a" }}
+                    style={{ width: "125px", color: "#000107" }}
                     dir="rtl"
                   >
                     رقم التصديق
@@ -158,13 +163,13 @@ export function AttestationCard({
                   </td>
                   <td
                     className=" px-1.5 text-left font-bold"
-                    style={{ color: "#000000", width: "140px" }}
+                    style={{ color: "#000107", width: "140px" }}
                   >
                     {data.verifyBy}
                   </td>
                   <td
                     className=" text-left font-bold whitespace-nowrap align-top"
-                    style={{ color: "#0f172a" }}
+                    style={{ color: "#000107" }}
                     dir="rtl"
                   >
                     تم التحقق من قبل
@@ -174,19 +179,19 @@ export function AttestationCard({
                 <tr>
                   <td
                     className=" text-left font-bold whitespace-nowrap"
-                    style={{ color: "#0f172a" }}
+                    style={{ color: "#000107" }}
                   >
                     Verify at
                   </td>
                   <td
                     className=" px-1.5 text-left font-bold"
-                    style={{ color: "#000000", width: "140px" }}
+                    style={{ color: "#000107", width: "140px" }}
                   >
                     {data.verifyAt}
                   </td>
                   <td
                     className=" text-left font-bold whitespace-nowrap align-top"
-                    style={{ color: "#0f172a" }}
+                    style={{ color: "#000107" }}
                     dir="rtl"
                   >
                     تم التحقق في
@@ -195,21 +200,21 @@ export function AttestationCard({
 
                 <tr>
                   <td
-                    className=" text-wrap text-left justify-start font-bold whitespace-nowrap"
-                    style={{ color: "#0f172a" }}
+                    className=" text-wrap leading-2.7 text-left justify-start font-bold whitespace-nowrap"
+                    style={{ color: "#000107" }}
                   >
                     Applicant <br />
                     Name
                   </td>
                   <td
                     className=" px-1.5 flex text-left justify-start text-nowrap font-bold uppercase"
-                    style={{ color: "#000000", width: "140px" }}
+                    style={{ color: "#000107", width: "140px" }}
                   >
                     {data.applicantName}
                   </td>
                   <td
                     className=" text-left font-bold whitespace-nowrap align-top"
-                    style={{ color: "#0f172a" }}
+                    style={{ color: "#000107" }}
                     dir="rtl"
                   >
                     اسم العميل
@@ -219,19 +224,19 @@ export function AttestationCard({
                 <tr>
                   <td
                     className=" text-left font-bold align-top whitespace-nowrap"
-                    style={{ color: "#0f172a" }}
+                    style={{ color: "#000107" }}
                   >
                     Document <br /> Name
                   </td>
                   <td
                     className=" px-1.5 flex text-left w-full font-bold align-top leading-snug"
-                    style={{ color: "#000000", width: "150px" }}
+                    style={{ color: "#000107", width: "150px" }}
                   >
                     {data.documentName}
                   </td>
                   <td
                     className=" text-left font-bold align-top "
-                    style={{ color: "#0f172a" }}
+                    style={{ color: "#000107" }}
                     dir="rtl"
                   >
                     اسم الوثيقة
@@ -240,20 +245,20 @@ export function AttestationCard({
 
                 <tr>
                   <td
-                    className=" text-left h-fit font-bold "
-                    style={{ color: "#0f172a" }}
+                    className=" text-left leading-3 h-fit font-bold "
+                    style={{ color: "#000107" }}
                   >
                     Date of <br /> Attestation
                   </td>
                   <td
                     className=" px-1.5 text-left flex text-nowrap font-bold"
-                    style={{ color: "#000000", width: "140px" }}
+                    style={{ color: "#000107", width: "140px" }}
                   >
                     {data.dateOfAttestation}
                   </td>
                   <td
                     className=" text-left font-bold align-top"
-                    style={{ color: "#0f172a" }}
+                    style={{ color: "#000107" }}
                     dir="rtl"
                   >
                     تاريخ التصديق
@@ -262,20 +267,20 @@ export function AttestationCard({
 
                 <tr>
                   <td
-                    className=" text-left font-bold whitespace-nowrap"
-                    style={{ color: "#0f172a" }}
+                    className=" text-left leading-3 font-bold whitespace-nowrap"
+                    style={{ color: "#000107" }}
                   >
                     Approver <br /> Name
                   </td>
                   <td
                     className=" px-1.5 text-left flex font-bold"
-                    style={{ color: "#000000", width: "150px" }}
+                    style={{ color: "#000107", width: "150px" }}
                   >
                     {data.approverName}
                   </td>
                   <td
                     className=" text-left font-bold whitespace-nowrap align-top"
-                    style={{ color: "#0f172a" }}
+                    style={{ color: "#000107" }}
                     dir="rtl"
                   >
                     تمت المصادقة من قبل
@@ -389,13 +394,13 @@ export default function AttestationCertificate({
           <div className="text-right" dir="rtl">
             <p
               className="font-semibold tracking-wide"
-              style={{ fontSize: "13px", color: "#000000" }}
+              style={{ fontSize: "12px", color: "#000000" }}
             >
               تصديق بالرقم :{" "}
               <span
                 className=" font-normal "
                 style={{
-                  fontSize: "13.5px",
+                  fontSize: "12.5px",
                   color: "#000000",
                   fontFamily: '"Times New Roman", Times, serif',
                   fontWeight: 700,
@@ -405,8 +410,8 @@ export default function AttestationCertificate({
               </span>
             </p>
             <p
-              className="mt-0.5 font-semibold leading-normal"
-              style={{ fontSize: "12px", color: "#000000" }}
+              className="-mt-0.5 font-semibold leading-normal"
+              style={{ fontSize: "13px", color: "#000000" }}
             >
               تم إنجاز المعاملة إلكترونيا و للتأكد من صحة المعاملة يمكنك مسح
               الباركود{" "}
@@ -432,9 +437,9 @@ export default function AttestationCertificate({
                 src={qrCodeUrl}
                 alt="Verification QR Code"
                 style={{
-                  width: "75px",
+                  width: "72px",
                   border: "4px solid white",
-                  height: "75px",
+                  height: "72px",
                   objectFit: "contain",
                   display: "block",
                 }}
