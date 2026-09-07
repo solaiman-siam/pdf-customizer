@@ -1,74 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { getPdfList } from "../services/pdfApi";
 import { TailSpin } from "react-loader-spinner";
 
-// ─── Types ───────────────────────────────────────────────────────────────────
-
-interface PdfRecord {
-  id: string;
-  documentName: string;
-  generatedDate: string;
-  fileSize: string;
-  downloadUrl: string;
-}
-
-// ─── Mock Data ────────────────────────────────────────────────────────────────
-
-const mockRecords: PdfRecord[] = [
-  {
-    id: "ATT-2026-00124",
-    documentName: "University Degree Certificate",
-    generatedDate: "2026-08-28",
-    fileSize: "1.2 MB",
-    downloadUrl: "#",
-  },
-  {
-    id: "ATT-2026-00119",
-    documentName: "Birth Certificate - Attestation",
-    generatedDate: "2026-08-25",
-    fileSize: "840 KB",
-    downloadUrl: "#",
-  },
-  {
-    id: "ATT-2026-00113",
-    documentName: "Commercial Agreement Legalization",
-    generatedDate: "2026-08-20",
-    fileSize: "2.1 MB",
-    downloadUrl: "#",
-  },
-  {
-    id: "ATT-2026-00108",
-    documentName: "Marriage Certificate",
-    generatedDate: "2026-08-15",
-    fileSize: "950 KB",
-    downloadUrl: "#",
-  },
-  {
-    id: "ATT-2026-00101",
-    documentName: "Certificate of Origin",
-    generatedDate: "2026-08-10",
-    fileSize: "1.5 MB",
-    downloadUrl: "#",
-  },
-  {
-    id: "ATT-2026-00097",
-    documentName: "Power of Attorney",
-    generatedDate: "2026-08-05",
-    fileSize: "670 KB",
-    downloadUrl: "#",
-  },
-  {
-    id: "ATT-2026-00091",
-    documentName: "Diploma Transcript",
-    generatedDate: "2026-07-30",
-    fileSize: "1.8 MB",
-    downloadUrl: "#",
-  },
-];
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
@@ -93,9 +30,7 @@ export default function PdfGallary() {
           width="80"
           color="#313131"
           ariaLabel="tail-spin-loading"
-          radius="1"
-          wrapperStyle={{}}
-          wrapperClass=""
+          radius="5"
         />
       </div>
     );
