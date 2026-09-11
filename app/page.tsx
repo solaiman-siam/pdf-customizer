@@ -444,7 +444,7 @@ export default function Home() {
       )}
 
       {stage === "submitted" && selectedRequest && (
-        <div className="animate-fade-in-up mx-auto max-w-4xl rounded-xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
+        <div className="animate-fade-in-up mx-auto max-w-5xl rounded-xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-700 mb-2 border border-teal-200">
               <span className="h-2 w-2 rounded-full bg-teal-500 animate-pulse"></span>
@@ -609,13 +609,13 @@ export default function Home() {
               <div className="w-full overflow-x-auto rounded-xl border border-gray-300 bg-slate-100 p-4 md:p-8 flex flex-col items-center gap-8 shadow-inner">
                 {documentPreviewUrls.length > 0 ? (
                   documentPreviewUrls.map((url, idx) => (
-                    <div key={idx} className="flex flex-col items-center">
+                    <div key={idx} className="flex flex-col items-center shrink-0 w-max">
                       {documentPreviewUrls.length > 1 && (
                         <div className="mb-2 text-xs font-semibold text-gray-600 bg-white border border-gray-200 px-3 py-1 rounded-full shadow-sm">
                           Page {idx + 1} of {documentPreviewUrls.length}
                         </div>
                       )}
-                      <div className="transform scale-[0.85] sm:scale-100 origin-top">
+                      <div className="transform scale-[0.85] sm:scale-100 origin-top shrink-0">
                         <AttestedDocumentPage
                           id={`attested-document-pdf-${idx}`}
                           data={attestationData}
@@ -625,7 +625,7 @@ export default function Home() {
                     </div>
                   ))
                 ) : (
-                  <div className="transform scale-[0.85] sm:scale-100 origin-top">
+                  <div className="transform scale-[0.85] sm:scale-100 origin-top shrink-0">
                     <AttestedDocumentPage
                       id="attested-document-pdf-0"
                       data={attestationData}

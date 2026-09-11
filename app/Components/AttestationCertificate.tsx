@@ -55,11 +55,11 @@ export function AttestationCard({
 }: AttestationCardProps) {
   return (
     <div
-      className={`relative  mr-2 ${carlito.className} ${className}  pb-7`}
+      className={`relative translate-y-1.5 mr-2 ${carlito.className} ${className}  pb-7`}
       style={{
-        width: "290px",
+        width: "330px",
         backgroundColor: "#ffffff",
-        border: "1.5px solid #8f8e92",
+        border: "1.5px solid #9e9da1",
         color: "#0f172a",
         fontFamily:
           "var(--font-carlito), Carlito, Arial, Helvetica, sans-serif",
@@ -71,20 +71,20 @@ export function AttestationCard({
         <div
           className="mx-auto -mt-3 tracking-normal px-3 text-center h-fit flex flex-col items-center"
           style={{
-            width: "90%",
+            width: "92%",
           }}
         >
           <Image
-          style={{ display: "block" }}
+            style={{ display: "block" }}
             src={images.TopBanner}
-            className="w-full object-contain h-auto"
+            className="w-full rounded-[1px] object-contain h-auto"
             alt="Top Banner"
             width={320}
             height={80}
           />
         </div>
         {/* Main Card Row: Seal + Table */}
-        <div className=" flex relative z-50 items-center gap-3">
+        <div className=" flex relative  z-50 items-center gap-3">
           {/* Left Seal */}
           <div
             className="shrink-0 top-1/2 -translate-y-1/2  -left-18 flex absolute justify-center pl-0.5"
@@ -94,28 +94,33 @@ export function AttestationCard({
           </div>
 
           {/* Center/Right Table */}
-          <div className="flex-1 -mt-2 pl-8.5  pr-1">
+          <div className="flex-1 -mt-2.5 pl-8.5  pr-1">
             <table
               className="w-full border-collapse"
-              style={{ fontSize: "8.5px" }}
+              style={{ fontSize: "9.2px" }}
             >
-              <tbody>
-                <tr>
+              <tbody style={{ transform: "scaleY(0.95)" }}>
+                <tr>  
                   <td
-                    className=" text-left font-extrabold whitespace-nowrap"
-                    style={{ width: "45px", color: "#010000" }}
+                    className=" text-left text-[9px]! font-extrabold whitespace-nowrap"
+                    style={{ width: "55px", color: "#010000" }}
                   >
                     e-Verify No
                   </td>
                   <td
-                    className=" px-1.5 text-left text-nowrap font-bold"
+                    className=" px-1.5 text-left  text-nowrap font-extrabold"
                     style={{ color: "#010000", width: "140px" }}
                   >
                     {data.eVerifyNo}
                   </td>
                   <td
-                    className=" text-left font-bold whitespace-nowrap align-top"
-                    style={{ width: "125px", color: "#010000" }}
+                    className=" text-left font-bold whitespace-nowrap align-top translate-y-0.5"
+                    style={{
+                      color: "#000000",
+                      fontFamily: "Noto Sans Arabic",
+                      fontWeight: 700,
+                      fontSize: "7.5px",
+                    }}
                     dir="rtl"
                   >
                     رقم التصديق
@@ -124,7 +129,7 @@ export function AttestationCard({
 
                 <tr>
                   <td
-                    className=" text-left font-bold whitespace-nowrap"
+                    className=" text-left font-extrabold whitespace-nowrap"
                     style={{ color: "#010000" }}
                   >
                     Verify By
@@ -136,8 +141,13 @@ export function AttestationCard({
                     {data.verifyBy}
                   </td>
                   <td
-                    className=" text-left font-bold whitespace-nowrap align-top"
-                    style={{ color: "#010000" }}
+                    className=" text-left font-bold whitespace-nowrap align-top translate-y-0.5"
+                    style={{
+                      color: "#000000",
+                      fontFamily: "Noto Sans Arabic",
+                      fontWeight: 700,
+                      fontSize: "7.5px",
+                    }}
                     dir="rtl"
                   >
                     تم التحقق من قبل
@@ -153,22 +163,27 @@ export function AttestationCard({
                   </td>
                   <td
                     className=" px-1.5 text-left font-bold"
-                    style={{ color: "#010000", width: "140px" }}
+                    style={{ color: "#010000", width: "150px" }}
                   >
                     {data.verifyAt}
                   </td>
                   <td
-                    className=" text-left font-bold whitespace-nowrap align-top"
-                    style={{ color: "#010000" }}
+                    className=" text-left font-bold whitespace-nowrap align-top translate-y-0.5"
+                    style={{
+                      color: "#000000",
+                      fontFamily: "Noto Sans Arabic",
+                      fontWeight: 700,
+                      fontSize: "7.5px",
+                    }}
                     dir="rtl"
                   >
                     تم التحقق في
                   </td>
                 </tr>
 
-                <tr>
+                <tr >
                   <td
-                    className=" text-wrap leading-2.7 text-left justify-start font-bold whitespace-nowrap"
+                    className=" text-wrap pb-0.5 leading-2.75 text-left justify-start font-bold whitespace-nowrap"
                     style={{ color: "#010000" }}
                   >
                     Applicant <br />
@@ -181,39 +196,49 @@ export function AttestationCard({
                     {data.applicantName}
                   </td>
                   <td
-                    className=" text-left font-bold whitespace-nowrap align-top"
-                    style={{ color: "#010000" }}
+                    className=" text-left font-bold whitespace-nowrap align-top translate-y-0.5"
+                    style={{
+                      color: "#000000",
+                      fontFamily: "Noto Sans Arabic",
+                      fontWeight: 700,
+                      fontSize: "7.5px",
+                    }}
                     dir="rtl"
                   >
                     اسم العميل
                   </td>
                 </tr>
 
-                <tr>
+                <tr className="">
                   <td
-                    className=" text-left font-bold align-top whitespace-nowrap"
+                    className=" text-left leading-2.75 font-bold align-top whitespace-nowrap"
                     style={{ color: "#010000" }}
                   >
                     Document <br /> Name
                   </td>
                   <td
                     className=" px-1.5 flex text-left w-full font-bold align-top leading-snug"
-                    style={{ color: "#010000", width: "150px" }}
+                    style={{ color: "#010000", width: "140px" }}
                   >
                     {data.documentName}
                   </td>
                   <td
-                    className=" text-left font-bold align-top "
-                    style={{ color: "#010000" }}
+                    className=" text-left font-bold align-top translate-y-0.5 "
+                    style={{
+                      color: "#000000",
+                      fontFamily: "Noto Sans Arabic",
+                      fontWeight: 700,
+                      fontSize: "7.5px",
+                    }}
                     dir="rtl"
                   >
                     اسم الوثيقة
                   </td>
                 </tr>
 
-                <tr>
+                <tr className="">
                   <td
-                    className=" text-left leading-3 h-fit font-bold "
+                    className=" text-left pb-0.5 leading-2.75 h-fit font-bold "
                     style={{ color: "#010000" }}
                   >
                     Date of <br /> Attestation
@@ -225,8 +250,13 @@ export function AttestationCard({
                     {data.dateOfAttestation}
                   </td>
                   <td
-                    className=" text-left font-bold align-top"
-                    style={{ color: "#010000" }}
+                    className=" text-left font-bold align-top translate-y-0.5"
+                    style={{
+                      color: "#000000",
+                      fontFamily: "Noto Sans Arabic",
+                      fontWeight: 700,
+                      fontSize: "7.5px",
+                    }}
                     dir="rtl"
                   >
                     تاريخ التصديق
@@ -235,20 +265,26 @@ export function AttestationCard({
 
                 <tr>
                   <td
-                    className=" text-left leading-3 font-bold whitespace-nowrap"
-                    style={{ color: "#010000" }}
+                    className=" text-left leading-2.75 font-bold whitespace-nowrap"
+                    style={{ color: "#010000", fontWeight: 700 }}
                   >
                     Approver <br /> Name
                   </td>
                   <td
                     className=" px-1.5 text-left flex font-bold"
-                    style={{ color: "#010000", width: "150px" }}
+                    style={{ color: "#010000", width: "140px" ,  fontWeight: 700 }}
                   >
                     {data.approverName}
                   </td>
                   <td
-                    className=" text-left font-bold whitespace-nowrap align-top"
-                    style={{ color: "#010000" }}
+                    className=" text-left font-bold whitespace-nowrap align-top translate-y-0.5"
+                    style={{
+                      color: "#000000",
+                      fontFamily: "Noto Sans Arabic",
+                     
+                      fontWeight: 700,
+                      fontSize: "7.5px",
+                    }}
                     dir="rtl"
                   >
                     تمت المصادقة من قبل
@@ -307,9 +343,9 @@ export default function AttestationCertificate({
 
       {/* Horizontal Divider Line under Card */}
       <div
-        className="w-full mt-3"
+        className="w-full  mt-1.5 translate-y-1.5 "
         style={{
-          borderTop: "1.5px solid #4a687d",
+          borderTop: "1.5px solid #383838",
           width: "60%",
           marginLeft: "auto",
           marginRight: "40px",
@@ -358,30 +394,33 @@ export default function AttestationCertificate({
         </div>
 
         {/* Right Section: Arabic Notice & QR Code */}
-        <div className="flex relative z-50 -mt-3 mr-0 items-center gap-3">
-          <div className="text-right" dir="rtl">
+        <div className="flex relative z-50  mr-0 items-center gap-3">
+          <div className="text-right -mt-6" dir="rtl">
             <p
               className="font-semibold tracking-wide"
-              style={{ fontSize: "11px", color: "#000000" }}
+              style={{ fontSize: "12px", color: "#000000", fontWeight: 700 }}
             >
-              تصديق بالرقم :{" "}
+              بالرقم تصدیق
+              <span> : </span>
               <span
                 className=" font-normal "
                 style={{
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "#000000",
                   fontFamily: '"Times New Roman", Times, serif',
                   fontWeight: 700,
+                  transform: "scaleY(0.95)",
                 }}
               >
                 {data.eVerifyNo}
               </span>
+              
             </p>
             <p
               className="-mt-0.5 font-semibold leading-normal"
-              style={{ fontSize: "11px", color: "#000000" }}
+              style={{ fontSize: "12px", color: "#000000" }}
             >
-              تم إنجاز المعاملة إلكترونيا و للتأكد من صحة المعاملة يمكنك مسح
+              تم إنجاز المعاملة إلكترونیا و للتأكد من صحة المعاملة یمكنك مسح
               الباركود{" "}
               <span
                 className="font-bold"

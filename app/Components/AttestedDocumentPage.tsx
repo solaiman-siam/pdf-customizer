@@ -1,5 +1,7 @@
 "use client";
-import AttestationCertificate, { AttestationData } from "./AttestationCertificate";
+import AttestationCertificate, {
+  AttestationData,
+} from "./AttestationCertificate";
 interface AttestedDocumentPageProps {
   data: AttestationData;
   documentUrl?: string | null;
@@ -16,13 +18,14 @@ export default function AttestedDocumentPage({
   return (
     <div
       id={id}
-      className={`mx-auto flex flex-col justify-between overflow-hidden shadow-2xl ${className}`}
+      className={`mx-auto flex flex-col justify-between overflow-hidden shadow-2xl shrink-0 ${className}`}
       style={{
-        width: "694px", // Standard A4 width at 96 DPI
+        width: "775px", // Standard A4 width at 96 DPI (+20px)
+        minWidth: "775px",
         minHeight: "1000px", // Standard A4 height at 96 DPI
         height: "1000px",
         boxSizing: "border-box",
-        padding: "1px 20px 16px 20px",
+        padding: "1px 15px 5px 20px",
         backgroundColor: "#ffffff",
         color: "#0f172a",
         fontFamily: "Arial, Helvetica, sans-serif",
@@ -89,17 +92,12 @@ export default function AttestedDocumentPage({
                 />
               </svg>
             </div>
-            <p
-              className="font-semibold text-base"
-              style={{ color: "#1e293b" }}
-            >
+            <p className="font-semibold text-base" style={{ color: "#1e293b" }}>
               {data.documentName || "Uploaded Document"}
             </p>
-            <p
-              className="text-xs mt-1 max-w-sm"
-              style={{ color: "#64748b" }}
-            >
-              The uploaded document will be positioned in this top section of the attested PDF.
+            <p className="text-xs mt-1 max-w-sm" style={{ color: "#64748b" }}>
+              The uploaded document will be positioned in this top section of
+              the attested PDF.
             </p>
           </div>
         )}
