@@ -174,7 +174,7 @@ export default function Home() {
         (_, i) => `attested-document-pdf-${i}`
       );
 
-      const attestedFileName = `Oman_Attested_${attestationData.eVerifyNo}.pdf`;
+      const attestedFileName = `${attestationData.eVerifyNo}.pdf`;
       const attestedBlob = await generateAttestationPdf(
         elementIds,
         attestedFileName

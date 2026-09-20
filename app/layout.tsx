@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Carlito, Noto_Sans_Arabic } from "next/font/google";
+import { Geist, Geist_Mono, Carlito, Noto_Sans_Arabic, Scheherazade_New } from "next/font/google";
 import "./globals.css";
 import QueryClientProviderWrapper from "./providers/queryClientProviderWrapper";
 import { Toaster } from "react-hot-toast";
@@ -12,6 +12,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const scheherazadeNew = Scheherazade_New({
+  weight: ["400", "700"],
+  subsets: ["arabic"],
+  variable: "--font-scheherazadeNew",
 });
 
 const carlito = Carlito({
@@ -35,8 +41,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${carlito.variable} ${notoSansArabic.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${carlito.variable} ${notoSansArabic.variable} ${scheherazadeNew.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <QueryClientProviderWrapper >{children}</QueryClientProviderWrapper>
         <Toaster />

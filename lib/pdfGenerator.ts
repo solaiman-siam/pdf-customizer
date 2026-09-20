@@ -58,6 +58,50 @@ function sanitizeModernColors(clonedDoc: Document): void {
   });
 }
 
+let embeddedArabicFont: { name: string; uri: string; format: string } | null = null;
+
+async function getArabicFontDataUri(): Promise<{ name: string; uri: string; format: string } | null> {
+  if (embeddedArabicFont) return embeddedArabicFont;
+
+  const blobToDataUrl = (blob: Blob): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+
+  // 1. Try Google Fonts Scheherazade New Bold (700)
+  try {
+    const res = await fetch(
+      "https://fonts.gstatic.com/s/scheherazadenew/v21/4UaerFhTvxVnHDvUkUiHg8jprP4DM79DLlQI-aCksSC1rw.woff2"
+    );
+    if (res.ok) {
+      const blob = await res.blob();
+      const uri = await blobToDataUrl(blob);
+      embeddedArabicFont = { name: "Scheherazade New", uri, format: "woff2" };
+      return embeddedArabicFont;
+    }
+  } catch (e) {
+    console.warn("Could not fetch remote Scheherazade New font:", e);
+  }
+
+  // 2. Fallback to local Traditional Arabic Bold TTF in public/fonts
+  try {
+    const res = await fetch("/fonts/tradbdo.ttf");
+    if (res.ok) {
+      const blob = await res.blob();
+      const uri = await blobToDataUrl(blob);
+      embeddedArabicFont = { name: "Traditional Arabic", uri, format: "truetype" };
+      return embeddedArabicFont;
+    }
+  } catch (e) {
+    console.warn("Could not fetch local Traditional Arabic font:", e);
+  }
+
+  return null;
+}
+
 /**
  * Generates an official Attestation PDF (single or multi-page)
  */
@@ -70,8 +114,29 @@ export async function generateAttestationPdf(
     throw new Error("No element IDs provided for PDF generation");
   }
 
+  // Fetch font as data URI for 100% reliable canvas embedding
+  const fontData = await getArabicFontDataUri();
+
   // Ensure fonts and images are ready
   if (document.fonts) {
+    try {
+      if (fontData) {
+        const fontFace = new FontFace(fontData.name, `url(${fontData.uri})`, {
+          weight: "700",
+          style: "normal",
+        });
+        await fontFace.load();
+        document.fonts.add(fontFace);
+      }
+      await Promise.all([
+        document.fonts.load('400 12px "Traditional Arabic"'),
+        document.fonts.load('700 12px "Traditional Arabic"'),
+        document.fonts.load('400 12px "Scheherazade New"'),
+        document.fonts.load('700 12px "Scheherazade New"'),
+      ]);
+    } catch (e) {
+      console.warn("Font preloading notice:", e);
+    }
     await document.fonts.ready;
   }
 
@@ -107,6 +172,32 @@ export async function generateAttestationPdf(
       windowWidth: 1200,
       onclone: (clonedDoc) => {
         sanitizeModernColors(clonedDoc);
+
+        if (fontData) {
+          const style = clonedDoc.createElement("style");
+          style.textContent = `
+            @font-face {
+              font-family: '${fontData.name}';
+              src: url('${fontData.uri}') format('${fontData.format}');
+              font-weight: 700;
+              font-style: normal;
+            }
+            .scheherazade-arabic-text, [data-scheherazade] {
+              font-family: '${fontData.name}', serif !important;
+              letter-spacing: 0px !important;
+              display: inline-block !important;
+            }
+          `;
+          clonedDoc.head.appendChild(style);
+
+          const elements = clonedDoc.querySelectorAll<HTMLElement>(
+            ".scheherazade-arabic-text, [data-scheherazade]"
+          );
+          elements.forEach((el) => {
+            el.style.setProperty("font-family", `'${fontData.name}', serif`, "important");
+            el.style.setProperty("letter-spacing", "0px", "important");
+          });
+        }
       },
     });
 

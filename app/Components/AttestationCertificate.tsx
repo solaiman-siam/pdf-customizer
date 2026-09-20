@@ -2,13 +2,19 @@
 
 import React, { useEffect, useState } from "react";
 import QRCode from "qrcode";
-import { Carlito } from "next/font/google";
+import { Carlito, Scheherazade_New } from "next/font/google";
 import { images } from "@/lib/imageProvider";
 import Image from "next/image";
 
 const carlito = Carlito({
   weight: ["400", "700"],
   subsets: ["latin"],
+  display: "swap",
+});
+
+const scheherazadeNew = Scheherazade_New({
+  weight: ["400", "700"],
+  subsets: ["arabic"],
   display: "swap",
 });
 
@@ -100,7 +106,7 @@ export function AttestationCard({
               style={{ fontSize: "9.2px" }}
             >
               <tbody style={{ transform: "scaleY(0.95)" }}>
-                <tr>  
+                <tr>
                   <td
                     className=" text-left text-[9px]! font-extrabold whitespace-nowrap"
                     style={{ width: "55px", color: "#010000" }}
@@ -118,7 +124,7 @@ export function AttestationCard({
                     style={{
                       color: "#000000",
                       fontFamily: "Noto Sans Arabic",
-                      fontWeight: 700,
+                      fontWeight: 600,
                       fontSize: "7.5px",
                     }}
                     dir="rtl"
@@ -145,7 +151,7 @@ export function AttestationCard({
                     style={{
                       color: "#000000",
                       fontFamily: "Noto Sans Arabic",
-                      fontWeight: 700,
+                      fontWeight: 600,
                       fontSize: "7.5px",
                     }}
                     dir="rtl"
@@ -172,7 +178,7 @@ export function AttestationCard({
                     style={{
                       color: "#000000",
                       fontFamily: "Noto Sans Arabic",
-                      fontWeight: 700,
+                      fontWeight: 600,
                       fontSize: "7.5px",
                     }}
                     dir="rtl"
@@ -181,7 +187,7 @@ export function AttestationCard({
                   </td>
                 </tr>
 
-                <tr >
+                <tr>
                   <td
                     className=" text-wrap pb-0.5 leading-2.75 text-left justify-start font-bold whitespace-nowrap"
                     style={{ color: "#010000" }}
@@ -200,7 +206,7 @@ export function AttestationCard({
                     style={{
                       color: "#000000",
                       fontFamily: "Noto Sans Arabic",
-                      fontWeight: 700,
+                      fontWeight: 600,
                       fontSize: "7.5px",
                     }}
                     dir="rtl"
@@ -227,7 +233,7 @@ export function AttestationCard({
                     style={{
                       color: "#000000",
                       fontFamily: "Noto Sans Arabic",
-                      fontWeight: 700,
+                      fontWeight: 600,
                       fontSize: "7.5px",
                     }}
                     dir="rtl"
@@ -254,7 +260,7 @@ export function AttestationCard({
                     style={{
                       color: "#000000",
                       fontFamily: "Noto Sans Arabic",
-                      fontWeight: 700,
+                      fontWeight: 600,
                       fontSize: "7.5px",
                     }}
                     dir="rtl"
@@ -272,7 +278,11 @@ export function AttestationCard({
                   </td>
                   <td
                     className=" px-1.5 text-left flex font-bold"
-                    style={{ color: "#010000", width: "140px" ,  fontWeight: 700 }}
+                    style={{
+                      color: "#010000",
+                      width: "140px",
+                      fontWeight: 700,
+                    }}
                   >
                     {data.approverName}
                   </td>
@@ -281,8 +291,8 @@ export function AttestationCard({
                     style={{
                       color: "#000000",
                       fontFamily: "Noto Sans Arabic",
-                     
-                      fontWeight: 700,
+
+                      fontWeight: 600,
                       fontSize: "7.5px",
                     }}
                     dir="rtl"
@@ -395,17 +405,33 @@ export default function AttestationCertificate({
 
         {/* Right Section: Arabic Notice & QR Code */}
         <div className="flex relative z-50  mr-0 items-center gap-3">
-          <div className="text-right -mt-6" dir="rtl">
+          <div className="text-right flex flex-col -mt-5.5" dir="rtl">
             <p
-              className="font-semibold tracking-wide"
-              style={{ fontSize: "12px", color: "#000000", fontWeight: 700 }}
+              className="font-semibold  flex items-center gap-1 "
+              style={{
+                fontSize: "10.5px",
+                color: "#000000",
+                fontWeight: 700,
+              }}
             >
-              بالرقم تصدیق
+              <span
+                data-scheherazade="true"
+                className="scheherazade-arabic-text"
+                style={{
+                  fontFamily: '"Scheherazade New", "Traditional Arabic", serif',
+                  letterSpacing: "0px",
+                  fontSize: "10.25px",
+                  fontWeight: 700,
+                  display: "inline-block",
+                }}
+              >
+                بالرقم تصديق
+              </span>
               <span> : </span>
               <span
-                className=" font-normal "
+                className=" font-normal tracking-wide mt-0.5"
                 style={{
-                  fontSize: "12px",
+                  fontSize: "11px",
                   color: "#000000",
                   fontFamily: '"Times New Roman", Times, serif',
                   fontWeight: 700,
@@ -414,11 +440,15 @@ export default function AttestationCertificate({
               >
                 {data.eVerifyNo}
               </span>
-              
             </p>
             <p
-              className="-mt-0.5 font-semibold leading-normal"
-              style={{ fontSize: "12px", color: "#000000" }}
+              data-scheherazade="true"
+              className=" tracking-wide -mt-0.5"
+              style={{
+                fontSize: "10.25px",
+                color: "#000000",
+                fontWeight: 800,
+              }}
             >
               تم إنجاز المعاملة إلكترونیا و للتأكد من صحة المعاملة یمكنك مسح
               الباركود{" "}
@@ -429,6 +459,7 @@ export default function AttestationCertificate({
                   color: "#000000",
                   fontFamily: '"Times New Roman", Times, serif',
                   fontWeight: 700,
+                  fontSize: "11px",
                 }}
               >
                 (QR Code)
