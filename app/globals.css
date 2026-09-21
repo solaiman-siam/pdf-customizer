@@ -28,6 +28,7 @@
   --font-mono: var(--font-geist-mono);
   --font-carlito: var(--font-carlito);
   --font-scheherazadeNew: var(--font-scheherazadeNew);
+  --font-notoArabic: var(--font-noto-arabic);
 }
 
 /* Dark mode disabled — always use white background */

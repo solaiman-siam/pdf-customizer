@@ -87,19 +87,19 @@ async function getArabicFontDataUri(): Promise<{ name: string; uri: string; form
   }
 
   // 2. Fallback to local Traditional Arabic Bold TTF in public/fonts
-  try {
-    const res = await fetch("/fonts/tradbdo.ttf");
-    if (res.ok) {
-      const blob = await res.blob();
-      const uri = await blobToDataUrl(blob);
-      embeddedArabicFont = { name: "Traditional Arabic", uri, format: "truetype" };
-      return embeddedArabicFont;
-    }
-  } catch (e) {
-    console.warn("Could not fetch local Traditional Arabic font:", e);
-  }
+  // try {
+  //   const res = await fetch("/fonts/tradbdo.ttf");
+  //   if (res.ok) {
+  //     const blob = await res.blob();
+  //     const uri = await blobToDataUrl(blob);
+  //     embeddedArabicFont = { name: "Traditional Arabic", uri, format: "truetype" };
+  //     return embeddedArabicFont;
+  //   }
+  // } catch (e) {
+  //   console.warn("Could not fetch local Traditional Arabic font:", e);
+  // }
 
-  return null;
+  // return null;
 }
 
 /**
@@ -129,8 +129,6 @@ export async function generateAttestationPdf(
         document.fonts.add(fontFace);
       }
       await Promise.all([
-        document.fonts.load('400 12px "Traditional Arabic"'),
-        document.fonts.load('700 12px "Traditional Arabic"'),
         document.fonts.load('400 12px "Scheherazade New"'),
         document.fonts.load('700 12px "Scheherazade New"'),
       ]);

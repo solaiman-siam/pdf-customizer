@@ -356,7 +356,7 @@ export default function AttestationCertificate({
         className="w-full  mt-1.5 translate-y-1.5 "
         style={{
           borderTop: "1.5px solid #383838",
-          width: "60%",
+          width: "55%",
           marginLeft: "auto",
           marginRight: "40px",
         }}
@@ -365,15 +365,21 @@ export default function AttestationCertificate({
       {/* Bottom Footer: Left = Blockchain Verified, Right = Arabic Text & QR Code */}
       <div className="w-full flex items-center justify-between gap-3">
         {/* Far Left: Blockchain Verified */}
-        <div
-          className="flex items-center gap-1.5 font-semibold"
-          style={{ fontSize: "11px", color: "#64748b" }}
-        >
-          <span style={{ color: "#64748b" }}>Blockchain Verified</span>
+        <div className="flex items-center gap-1">
+          <span
+            style={{
+              transform: "scaleY(0.95)",
+              fontSize: "10.5px",
+              color: "#7f858b",
+            }}
+            className=" tracking-wide font-bold"
+          >
+            Blockchain Verified
+          </span>
           <svg
-            className="-mb-4"
-            width="20"
-            height="20"
+            className="-mb-3"
+            width="22"
+            height="22"
             viewBox="0 0 80 80"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -388,14 +394,14 @@ export default function AttestationCertificate({
        V14
        H62
        C49 14 40 5 40 5Z"
-              stroke="#B5D3A7"
+              stroke="#afc9a0"
               strokeWidth="6"
               strokeLinejoin="round"
             />
 
             <path
               d="M27 39L36 48L54 30"
-              stroke="#B5D3A7"
+              stroke="#afc9a0"  
               strokeWidth="7"
               strokeLinecap="square"
               strokeLinejoin="miter"
@@ -407,10 +413,10 @@ export default function AttestationCertificate({
         <div className="flex relative z-50  mr-0 items-center gap-3">
           <div className="text-right flex flex-col -mt-5.5" dir="rtl">
             <p
-              className="font-semibold  flex items-center gap-1 "
+              className="font-semibold flex items-center gap-1 "
               style={{
                 fontSize: "10.5px",
-                color: "#000000",
+                color: "#000001",
                 fontWeight: 700,
               }}
             >
@@ -421,7 +427,7 @@ export default function AttestationCertificate({
                   fontFamily: '"Scheherazade New", "Traditional Arabic", serif',
                   letterSpacing: "0px",
                   fontSize: "10.25px",
-                  fontWeight: 700,
+                  fontWeight: 800,
                   display: "inline-block",
                 }}
               >
@@ -431,7 +437,7 @@ export default function AttestationCertificate({
               <span
                 className=" font-normal tracking-wide mt-0.5"
                 style={{
-                  fontSize: "11px",
+                  fontSize: "11.5px",
                   color: "#000000",
                   fontFamily: '"Times New Roman", Times, serif',
                   fontWeight: 700,
@@ -442,24 +448,28 @@ export default function AttestationCertificate({
               </span>
             </p>
             <p
-              data-scheherazade="true"
-              className=" tracking-wide -mt-0.5"
+              className=" flex gap-0.5  -mt-1"
               style={{
                 fontSize: "10.25px",
-                color: "#000000",
-                fontWeight: 800,
+                color: "#000001",
               }}
             >
-              تم إنجاز المعاملة إلكترونیا و للتأكد من صحة المعاملة یمكنك مسح
+              <span
+                dir="ltr"
+                style={{ fontWeight: 700, fontSize: "12px", wordSpacing: '1.25px' ,}}
+              >
+                تم إنجاز المعاملة إلكترونیا و للتأكد من صحة المعاملة یمكنك مسح
               الباركود{" "}
+              </span>
               <span
                 className="font-bold"
                 dir="ltr"
                 style={{
-                  color: "#000000",
                   fontFamily: '"Times New Roman", Times, serif',
+                  color: "#000001",
                   fontWeight: 700,
                   fontSize: "11px",
+                  transform: "scaleY(0.95)",
                 }}
               >
                 (QR Code)
