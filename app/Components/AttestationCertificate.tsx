@@ -424,9 +424,9 @@ export default function AttestationCertificate({
                 data-scheherazade="true"
                 className="scheherazade-arabic-text"
                 style={{
-                  fontFamily: '"Scheherazade New", "Traditional Arabic", serif',
+                  // fontFamily: '"Scheherazade New", "Traditional Arabic", serif',
                   letterSpacing: "0px",
-                  fontSize: "10.25px",
+                  fontSize: "12px",
                   fontWeight: 800,
                   display: "inline-block",
                 }}
