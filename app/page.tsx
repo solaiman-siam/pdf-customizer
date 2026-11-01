@@ -67,6 +67,7 @@ export default function Home() {
     setIsAuthenticated(false);
     setUserEmail("");
     setStage("home");
+    toast.success("You have been signed out successfully.");
   }
 
   const mainService = useMemo(

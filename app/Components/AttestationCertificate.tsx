@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState } from "react";
 import QRCode from "qrcode";
@@ -40,7 +40,6 @@ export function OmanSeal({ className = "" }: { className?: string }) {
         width={800}
         height={800}
         className=" w-full h-auto  object-contain "
-        style={{ display: "block" }}
       />
     </div>
   );
@@ -81,7 +80,6 @@ export function AttestationCard({
           }}
         >
           <Image
-            style={{ display: "block" }}
             src={images.TopBanner}
             className="w-full rounded-[1px] object-contain h-auto"
             alt="Top Banner"
@@ -120,7 +118,7 @@ export function AttestationCard({
                     {data.eVerifyNo}
                   </td>
                   <td
-                    className=" text-left font-bold whitespace-nowrap align-top translate-y-0.5"
+                    className=" text-left font-bold  whitespace-nowrap align-top translate-y-0.5"
                     style={{
                       color: "#000000",
                       fontFamily: "Noto Sans Arabic",
@@ -421,15 +419,9 @@ export default function AttestationCertificate({
               }}
             >
               <span
-                data-scheherazade="true"
-                className="scheherazade-arabic-text"
-                style={{
-                  // fontFamily: '"Scheherazade New", "Traditional Arabic", serif',
-                  letterSpacing: "0px",
-                  fontSize: "12px",
-                  fontWeight: 800,
-                  display: "inline-block",
-                }}
+                dir="ltr"
+                // className="scheherazade-arabic-text"
+                style={{ fontWeight: 700, fontSize: "12px", wordSpacing: '1.25px' ,}}
               >
                 بالرقم تصديق
               </span>
@@ -456,6 +448,7 @@ export default function AttestationCertificate({
             >
               <span
                 dir="ltr"
+                // className="scheherazade-arabic-text"
                 style={{ fontWeight: 700, fontSize: "12px", wordSpacing: '1.25px' ,}}
               >
                 تم إنجاز المعاملة إلكترونیا و للتأكد من صحة المعاملة یمكنك مسح

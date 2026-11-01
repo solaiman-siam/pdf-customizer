@@ -68,7 +68,7 @@ export default function DetailsPage({ params }: PageProps) {
       <div className="relative border bg-white sm:p-18 border-black-500 w-full max-w-[1100px]">
         {/* Vertical text OUTSIDE the black box on the left */}
         <div
-          className="absolute -left-7 sm:left-10 top-1/2 -translate-y-1/2 text-[#49afcd] text-lg sm:text-[19.5px] font-normal tracking-wide select-none pointer-events-none whitespace-nowrap"
+          className="absolute -left-10.5 sm:left-10 top-1/2 -translate-y-1/2 text-[#49afcd] text-lg sm:text-[19.5px] font-normal tracking-wide select-none pointer-events-none whitespace-nowrap"
           style={{
             writingMode: "vertical-rl",
             transform: "rotate(180deg)",
@@ -120,8 +120,9 @@ export default function DetailsPage({ params }: PageProps) {
             >
               بيانات التصديق الرقمي
             </h2>
+               {/* mobile screen */}
             <h2
-              className="text-[#49afcd] font-semibold py-3 pr-4 text-right text-[35px] sm:hidden tracking-wide mb-0.5 sm:mb-1 leading-snug"
+              className="text-[#49afcd] font-semibold py-3 pr-8 text-right text-[30px] sm:hidden tracking-wide mb-0.5 sm:mb-1 leading-snug"
               dir="rtl"
             >
               بيانات التصديق  <br></br>الرقمي
@@ -129,7 +130,8 @@ export default function DetailsPage({ params }: PageProps) {
             <h1 className="text-[#49afcd] hidden sm:block font-bold text-lg sm:text-[25px] tracking-normal leading-tight">
               Digital Attestation Result
             </h1>
-            <h1 className="text-[#49afcd] sm:hidden text-left pl-6 w-7/12 block font-semibold text-[35px] sm:text-[25px] tracking-normal leading-tight">
+            {/* mobile screen */}
+            <h1 className="text-[#49afcd] sm:hidden text-left pl-10  block font-semibold text-[30px]  tracking-normal leading-tight">
               Digital Attestation Result
             </h1>
           </div>
@@ -145,35 +147,35 @@ export default function DetailsPage({ params }: PageProps) {
               {/* Table */}
               <table className="w-full border-collapse border border-[#94a3b8] table-fixed">
                 <tbody>
-                  <tr className="border-b border-[#94a3b8]">
-                    <td className="w-[32%] sm:w-[260px] min-w-[85px] sm:min-w-[260px] border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                  <tr className="border-b  border-[#94a3b8]">
+                    <td className="w-[32%] sm:w-[260px] min-w-[85px] sm:min-w-[260px] border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Transaction Number
                     </td>
-                    <td className="px-1  py-1 text-slate-700 font-black break-words leading-tight">
+                    <td className="px-1  py-1 text-[#064884]  font-black break-words leading-tight">
                       {record.eVerifyNo ?? "—"}
                     </td>
                   </tr>
-                  <tr className="border-b border-[#94a3b8]">
-                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                  <tr className="border-b border-t-slate-500 border-t-2 border-[#94a3b8]">
+                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Payment ID
                     </td>
-                    <td className="px-1  py-1 text-slate-700 font-black break-words leading-tight">
+                    <td className="px-1  py-1 text-[#064884] font-black break-words leading-tight">
                       {record.paymentId ?? "—"}
                     </td>
                   </tr>
-                  <tr className="border-b border-[#94a3b8]">
-                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                  <tr className="border-b border-t-slate-500 border-t-2 border-[#94a3b8]">
+                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Total Payment
                     </td>
-                    <td className="px-1  py-1 text-slate-700 font-black break-words leading-tight">
+                    <td className="px-1  py-1 text-[#064884] font-black break-words leading-tight">
                       {record.totalPayment ?? "—"}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                  <tr className="border-t-slate-500 border-t-2">
+                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Transaction Date
                     </td>
-                    <td className="px-1  py-1 text-slate-700 font-black break-words leading-tight">
+                    <td className="px-1  py-1 text-[#064884] font-black break-words leading-tight">
                       {record.transactionDate ?? "—"}
                     </td>
                   </tr>
@@ -191,34 +193,34 @@ export default function DetailsPage({ params }: PageProps) {
               <table className="w-full border-collapse border border-[#94a3b8] table-fixed">
                 <tbody>
                   <tr className="border-b border-[#94a3b8]">
-                    <td className="w-[32%] sm:w-[260px] min-w-[85px] sm:min-w-[260px] border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                    <td className="w-[32%] sm:w-[260px] min-w-[85px] sm:min-w-[260px] border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Document Type
                     </td>
-                    <td className="px-1  py-1 text-slate-700 font-black break-words leading-tight">
+                    <td className="px-1  py-1 text-[#064884] font-black break-words leading-tight">
                       {record.documentName ?? "—"}
                     </td>
                   </tr>
-                  <tr className="border-b border-[#94a3b8]">
-                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                  <tr className="border-b border-t-slate-500 border-t-2 border-[#94a3b8]">
+                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Applicant Name
                     </td>
-                    <td className="px-1  py-1 text-slate-700 font-black break-words leading-tight">
+                    <td className="px-1  py-1 text-[#064884] font-black break-words leading-tight">
                       {record.applicantName ?? "—"}
                     </td>
                   </tr>
-                  <tr className="border-b border-[#94a3b8]">
-                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                  <tr className="border-b border-t-slate-500 border-t-2 border-[#94a3b8]">
+                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Email Id
                     </td>
-                    <td className="px-1  py-1 text-slate-700 font-black break-words leading-tight">
+                    <td className="px-1  py-1 text-[#064884] font-black break-words leading-tight">
                       {record.email ?? "—"}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                  <tr className="border-t-slate-500 border-t-2">
+                    <td className="border-r  border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Phone Number
                     </td>
-                    <td className="px-1  py-1 text-slate-700 font-black break-words leading-tight">
+                    <td className="px-1  py-1 text-[#064884] font-black break-words leading-tight">
                       {record.phoneNumber ?? "—"}
                     </td>
                   </tr>
@@ -236,26 +238,26 @@ export default function DetailsPage({ params }: PageProps) {
               <table className="w-full border-collapse border border-[#94a3b8] table-fixed">
                 <tbody>
                   <tr className="border-b border-[#94a3b8]">
-                    <td className="w-[32%] sm:w-[260px] min-w-[85px] sm:min-w-[260px] border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                    <td className="w-[32%] sm:w-[260px] min-w-[85px] sm:min-w-[260px] border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Verifier Name
                     </td>
-                    <td className="px-1  py-1 text-slate-700 font-black break-words leading-tight">
+                    <td className="px-1  py-1 text-[#064884] font-black break-words leading-tight">
                       {record.verifyBy ?? "—"}
                     </td>
                   </tr>
-                  <tr className="border-b border-[#94a3b8]">
-                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                  <tr className="border-b border-t-slate-500 border-t-2 border-[#94a3b8]">
+                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Verification Status
                     </td>
-                    <td className="px-1  py-1 text-slate-700 font-black break-words leading-tight">
+                    <td className="px-1  py-1 text-[#064884] font-black break-words leading-tight">
                       {record.approverName ?? "—"}
                     </td>
                   </tr>
-                  <tr>
-                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                  <tr className="border-t-slate-500 border-t-2">
+                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Verification Date & Time
                     </td>
-                    <td className="px-1  py-1 text-slate-700 font-black break-words leading-tight">
+                    <td className="px-1  py-1 text-[#064884] font-black break-words leading-tight">
                       {record.verifyAt ?? "—"}
                     </td>
                   </tr>
@@ -273,26 +275,26 @@ export default function DetailsPage({ params }: PageProps) {
               <table className="w-full border-collapse border border-[#94a3b8] table-fixed">
                 <tbody>
                   <tr className="border-b border-[#94a3b8]">
-                    <td className="w-[32%] sm:w-[260px] min-w-[85px] sm:min-w-[260px] border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                    <td className="w-[32%] sm:w-[260px] min-w-[85px] sm:min-w-[260px] border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Original Document
                     </td>
                     <td className="px-1  py-1 break-words leading-tight">
                       <button
                         onClick={() => openPdfInNewTab(record.originalPdf)}
-                        className="text-slate-700 font-bold italic hover:underline cursor-pointer bg-transparent border-none p-0"
+                        className="text-[#064884] font-bold italic hover:underline cursor-pointer bg-transparent border-none p-0"
                       >
                         View Document
                       </button>
                     </td>
                   </tr>
-                  <tr>
-                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-500 break-words leading-tight">
+                  <tr className="border-t-slate-500 border-t-2">
+                    <td className="border-r border-[#94a3b8] px-1  py-1 font-normal text-slate-800 break-words leading-tight">
                       Attested Document
                     </td>
                     <td className="px-1  py-1 break-words leading-tight">
                       <button
                         onClick={() => openPdfInNewTab(record.documents)}
-                        className="text-slate-700 font-bold italic hover:underline cursor-pointer bg-transparent border-none p-0"
+                        className="text-[#064884] font-bold italic hover:underline cursor-pointer bg-transparent border-none p-0"
                       >
                         View Document
                       </button>

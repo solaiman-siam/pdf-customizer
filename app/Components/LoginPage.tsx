@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { images } from "@/lib/imageProvider";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 // ----------------------------------------------------------------------
 // 🔐 YOUR SECRET CREDENTIALS
@@ -58,6 +59,7 @@ export default function LoginPage({ onLogin, onBack }: LoginPageProps) {
       // Reject if either secret email or password does not match
       if (!isEmailValid || !isPasswordValid) {
         setServerError("Invalid secret email or password. Access denied.");
+        toast.error("Invalid secret credentials. Access denied.");
         return;
       }
 
@@ -72,6 +74,7 @@ export default function LoginPage({ onLogin, onBack }: LoginPageProps) {
         );
       }
 
+      toast.success("Welcome back! Signed in successfully.");
       if (onLogin) {
         onLogin(data);
       } else {
@@ -80,6 +83,7 @@ export default function LoginPage({ onLogin, onBack }: LoginPageProps) {
     } catch (err) {
       console.error("Login failed:", err);
       setServerError("An unexpected error occurred during login. Please try again.");
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
 

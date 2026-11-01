@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Carlito, Noto_Sans_Arabic, Scheherazade_New } from "next/font/google";
 import "./globals.css";
 import QueryClientProviderWrapper from "./providers/queryClientProviderWrapper";
-import { Toaster } from "react-hot-toast";
+import CustomToaster from "./Components/CustomToaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,7 +57,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col">
         <QueryClientProviderWrapper >{children}</QueryClientProviderWrapper>
-        <Toaster />
+        <CustomToaster />
       </body>
     </html>
   );
