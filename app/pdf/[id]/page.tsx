@@ -131,7 +131,7 @@ export default function DetailsPage({ params }: PageProps) {
               Digital Attestation Result
             </h1>
             {/* mobile screen */}
-            <h1 className="text-[#49afcd] sm:hidden text-left pl-10  block font-semibold text-[30px]  tracking-normal leading-tight">
+            <h1 className="text-[#49afcd] sm:hidden w-8/12 text-left pb-4 pl-10  block font-semibold text-[30px]  tracking-normal leading-tight">
               Digital Attestation Result
             </h1>
           </div>
